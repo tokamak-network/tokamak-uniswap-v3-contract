@@ -9,9 +9,9 @@ const hre = require("hardhat");
 async function main() {
 
   // _factory
-  let _factory = "0xcad3A069a1E4607eA204A889FDEbF29B4aC78F00"
+  let _factory = "0x56F70e642886aAFEdc75ed7EEfA94dbbEbda280E"
   // _WETH9
-  let _WETH9 = "0x67F3bE272b1913602B191B3A68F7C238A2D81Bb9"
+  let _WETH9 = "0xF1B5DF98574C18d204fd91ec328f83Fca16337BE"
 
   const Quoter = await hre.ethers.getContractFactory("Quoter");
   const quoter = await Quoter.deploy(_factory, _WETH9);
