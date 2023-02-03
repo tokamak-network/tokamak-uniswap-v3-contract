@@ -1,6 +1,11 @@
 const conf = require("./config");
 // const { ethers } = require("hardhat");
 const optimismSDK = require("@zena-park/tokamak-sdk")
+const { computePoolAddress } = require("@uniswap/v3-sdk")
+const { SupportedChainId, Token } = require("@uniswap/sdk-core")
+// const ERC20Artifact = require("./abis/ERC20.json");
+// const IUniswapV3PoolABI = require("./abis/UniswapV3Pool.json");
+// const { ethers } = require("hardhat");
 
 const getSigners = async () => {
     const l1RpcProvider = new ethers.providers.JsonRpcProvider(conf.rpc_ndoe.l1Url)
@@ -16,6 +21,7 @@ const getSigners = async () => {
 const setup = async(l1Addr, l2Addr) => {
     const [l1Signer, l2Signer] = await getSigners()
     ourAddr = l1Signer.address
+    console.log('ourAddr', ourAddr);
 
     crossChainMessenger = new optimismSDK.CrossChainMessenger({
         l1ChainId: 5,    // Goerli value, 1 for mainnet
@@ -27,6 +33,9 @@ const setup = async(l1Addr, l2Addr) => {
     // console.log('crossChainMessenger',crossChainMessenger);
 
     l1Bridge = new ethers.Contract(conf.bridge.l1Bridge, conf.BridgeABI, l1Signer)
+
+    console.log('l1Addr', l1Addr);
+
     l1ERC20 = new ethers.Contract(l1Addr, conf.ERC20ABI, l1Signer)
     l2ERC20 = new ethers.Contract(l2Addr, conf.ERC20ABI, l2Signer)
     erc20Addrs = {
@@ -36,8 +45,8 @@ const setup = async(l1Addr, l2Addr) => {
 }    // setup
 
 const reportBridgeBalances = async (l1Addr, l2Addr) => {
-
-    const deposits = (await l1Bridge.deposits(l1Addr, l2Addr)).toString().slice(0,-18)
+    const decimals = await l1ERC20.decimals()
+    const deposits = (await l1Bridge.deposits(l1Addr, l2Addr)).toString().slice(0,-1*decimals)
 
     console.log(`deposits in Bridge : ${deposits} `)
     return
@@ -45,8 +54,14 @@ const reportBridgeBalances = async (l1Addr, l2Addr) => {
   }
 
 const reportERC20Balances = async () => {
-    const l1Balance = (await l1ERC20.balanceOf(ourAddr)).toString().slice(0,-18)
-    const l2Balance = (await l2ERC20.balanceOf(ourAddr)).toString().slice(0,-18)
+
+    const l1Decimals = await l1ERC20.decimals()
+    const l2Decimals = await l2ERC20.decimals()
+    // console.log(`l1Decimals:${l1Decimals} `)
+    // console.log(`l2Decimals:${l2Decimals} `)
+
+    const l1Balance = (await l1ERC20.balanceOf(ourAddr)).toString().slice(0,-1*l1Decimals.toNumber())
+    const l2Balance = (await l2ERC20.balanceOf(ourAddr)).toString().slice(0,-1*l2Decimals.toNumber())
 
     console.log(`ourAddr:${ourAddr} `)
     console.log(`OUTb on L1:${l1Balance}     OUTb on L2:${l2Balance}`)
@@ -61,8 +76,11 @@ const depositERC20 = async (amount) => {
     console.log("Deposit ERC20")
     await reportERC20Balances()
     console.log(`\n`)
+
     const start = new Date()
-    let depositAmount = ethers.utils.parseEther(amount)
+    // let depositAmount = ethers.utils.parseEther(amount)
+    let depositAmount = amount
+
 
     // Need the l2 address to know which bridge is responsible
     const allowanceResponse = await crossChainMessenger.approveERC20(
@@ -84,6 +102,7 @@ const depositERC20 = async (amount) => {
     console.log(`depositERC20 took ${(new Date()-start)/1000} seconds\n\n`)
     await reportERC20Balances()
     console.log(`\n`)
+
 
   }     // depositERC20()
 
@@ -121,7 +140,6 @@ task("register-erc20-l2", "Create Pool")
 
         const L2StandardTokenFactory_ABI = require("./abis/L2StandardTokenFactory.json");
         const ERC20Artifact = require("./abis/ERC20.json");
-
         const L2StandardTokenFactory = new ethers.Contract(
             "0x4200000000000000000000000000000000000012",
             L2StandardTokenFactory_ABI.abi,
@@ -243,31 +261,6 @@ task("view-lp-token", "View LP Token")
 
     })
 
-
-// task("create-pool", "Create Pool")
-//     .addParam("networkName", "Network Name")
-//     .addParam("token0", "Token 0")
-//     .addParam("token1", "Token 1")
-//     .addParam("token0", "Token 0")
-//     .addParam("token0", "Token 0")
-//     .setAction(async ({ networkName, tokenId }) => {
-//         console.log(networkName, tokenId)
-//         console.log(conf.uniswapInfo[networkName])
-//         const accounts = await ethers.getSigners();
-//         const account = accounts[0];
-//         const NPM_ABI = require("./abis/NonfungiblePositionManager.json");
-//         const NpmContract = new ethers.Contract(conf.uniswapInfo[networkName].npm, NPM_ABI.abi, account);
-
-//         try {
-//             let positions = await NpmContract.positions(ethers.BigNumber.from(tokenId));
-//             console.log("positions", positions)
-
-//         } catch(e) {
-//             console.log("err", e)
-//         }
-
-//     })
-
 task("balances-ether", "Balance")
     .addParam("account", "Account")
     .setAction(async ({ account }) => {
@@ -277,4 +270,124 @@ task("balances-ether", "Balance")
         let bal = await ethers.provider.getBalance(account) ;
         console.log(bal);
         return bal
+    })
+
+
+task("create-pool-using-npm", "Create Pool Using NPM")
+    .addParam("networkName", "Network Name")
+    .addParam("token0", "Token0")
+    .addParam("token1", "Token1")
+    .addParam("fee", "Fee")
+    .addParam("token0Decimal", "Token0 Decimal")
+    .addParam("token1Decimal", "Token1 Decimal")
+    .addParam("token0Amount", "Token0 Amount for Price")
+    .addParam("token1Amount", "Token1 Amount for Price")
+    .setAction(async ({ networkName, token0, token1, fee, token0Decimal, token1Decimal, token0Amount, token1Amount}) => {
+        console.log(networkName, token0, token1, fee, token0Decimal, token1Decimal,  token0Amount, token1Amount)
+        const ERC20Artifact = require("./abis/ERC20.json");
+        const IUniswapV3PoolABI = require("./abis/UniswapV3Pool.json");
+
+        const accounts = await ethers.getSigners();
+        const account = accounts[0];
+        const NPM_ABI = require("./abis/NonfungiblePositionManager.json");
+        let addressConfig  ;
+        if (networkName == "mainnet") addressConfig = conf.uniswapInfo.mainnet;
+        else if (networkName == "tokamakgoerli") addressConfig = conf.uniswapInfo.tokamakgoerli;
+        else if (networkName == "goerli") addressConfig = conf.uniswapInfo.goerli;
+        console.log("addressConfig.npm", addressConfig.npm)
+
+        let TOKEN0 = new Token(
+            5,
+            token0,
+            18,
+            '',
+            ''
+        )
+        let TOKEN1 = new Token(
+            5,
+            token1,
+            18,
+            '',
+            ''
+        )
+        // Get the number of decimals
+        const token0Contract = new ethers.Contract(
+            token0,
+            ERC20Artifact.abi,
+            account
+        );
+        TOKEN0.decimals = await token0Contract.decimals();
+        TOKEN0.symbol = await token0Contract.symbol();
+        TOKEN0.name = await token0Contract.name();
+
+        const token1Contract = new ethers.Contract(
+            token1,
+            ERC20Artifact.abi,
+            account
+        );
+        TOKEN1.decimals = await token1Contract.decimals();
+        TOKEN1.symbol = await token1Contract.symbol();
+        TOKEN1.name = await token1Contract.name();
+        console.log("TOKEN0", TOKEN0);
+        console.log("TOKEN1", TOKEN1);
+
+        const currentPoolAddress = computePoolAddress({
+            factoryAddress: conf.uniswapInfo[networkName].poolfactory,
+            tokenA: TOKEN0,
+            tokenB: TOKEN1,
+            fee: ethers.BigNumber.from(fee),
+        })
+        console.log("currentPoolAddress", currentPoolAddress)
+
+        let code = await ethers.provider.getCode(currentPoolAddress)
+        console.log("code", code)
+        const univ3prices = require('@thanpolas/univ3prices');
+        console.log("addressConfig.npm", addressConfig.npm)
+
+        if (code == '0x') {
+            const NpmContract = new ethers.Contract(addressConfig.npm, NPM_ABI.abi, account);
+
+            try {
+                const sqrtPrice = univ3prices.utils.encodeSqrtRatioX96(parseInt(token0Amount), parseInt(token1Amount));
+                const price = univ3prices([token0Decimal, token1Decimal], sqrtPrice).toAuto();
+                console.log('sqrtPrice', sqrtPrice.toString());
+                console.log('price', price);
+                /*
+                let tx = await NpmContract.createAndInitializePoolIfNecessary(
+                    token0,
+                    token1,
+                    ethers.BigNumber.from(fee),
+                    ethers.BigNumber.from(sqrtPrice.toString()),
+                    {
+                        gasLimit: "2000000"
+                    }
+                );
+
+                console.log('createAndInitializePoolIfNecessary tx', tx);
+
+                await tx.wait();
+                    */
+            } catch(e) {
+                console.log("err", e)
+            }
+        } else {
+            const poolContract = new ethers.Contract(
+                currentPoolAddress,
+                IUniswapV3PoolABI.abi,
+                account
+            )
+            const token0 = await poolContract.token0()
+            console.log("token0 ", token0);
+            const token1 = await poolContract.token1()
+            console.log("token1 ", token1);
+
+            const slot0After = await poolContract.slot0()
+            console.log("slot0After ", slot0After);
+
+            // const sqrtPrice = univ3prices.utils.encodeSqrtRatioX96(parseInt(token0Amount), parseInt(token1Amount));
+            const price = univ3prices([18, 18], slot0After.sqrtPriceX96).toAuto();
+            console.log(price);
+
+        }
+
     })
