@@ -42,6 +42,8 @@ let uniswapInfo_goerli = {
     lockTOSaddr: "0x770e0d682277A4a9167971073f1Aa6d6403bb315"
 }
 
+/*
+/// V0
 let uniswapInfo_tokamakgoerli = {
     poolfactory: "0xcad3A069a1E4607eA204A889FDEbF29B4aC78F00",
     npm: "0x8A17F0454684C443a8e65813493Bf7Ed4501Ba99",
@@ -51,7 +53,7 @@ let uniswapInfo_tokamakgoerli = {
     wtonTosPool: "",
     tosethPool: "",
     wton: "",
-    tos: "",
+    tos: "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
     weth: "0x67F3bE272b1913602B191B3A68F7C238A2D81Bb9",
     usdc: "0xD08a2917653d4E460893203471f0000826fb4034",
     fee: 3000,
@@ -61,25 +63,29 @@ let uniswapInfo_tokamakgoerli = {
     lockTOSaddr: "",
     L2StandardTokenFactory: "0x4200000000000000000000000000000000000012"
 }
+*/
 
-// let uniswapInfo_tokamakgoerli = {
-//     poolfactory: "0xcad3A069a1E4607eA204A889FDEbF29B4aC78F00",
-//     npm: "0x8A17F0454684C443a8e65813493Bf7Ed4501Ba99",
-//     swapRouter: "0xE8F5B90FEc34B16fcf5AFD2e9B9c9525307f55a0",
-//     wethUsdcPool: "",
-//     wtonWethPool: "",
-//     wtonTosPool: "",
-//     tosethPool: "",
-//     wton: "",
-//     tos: "",
-//     weth: "0x67F3bE272b1913602B191B3A68F7C238A2D81Bb9",
-//     usdc: "0xD08a2917653d4E460893203471f0000826fb4034",
-//     fee: 3000,
-//     NonfungibleTokenPositionDescriptor: "0x712489e2D3ed9026702f72E34270c7e05ba1d003",
-//     UniswapV3Staker: "",
-//     ton: "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
-//     lockTOSaddr: ""
-// }
+/// V1
+let uniswapInfo_tokamakgoerli = {
+    poolfactory: "0x56F70e642886aAFEdc75ed7EEfA94dbbEbda280E",
+    npm: "0x2a3507eDF83338D7952Af30446e1fEBBb8534B5E",
+    swapRouter: "0xd8EF9699eBc5b8357cbAaAbCa8af40141180aaB2",
+    wethUsdcPool: "",
+    wtonWethPool: "",
+    wtonTosPool: "",
+    tosethPool: "",
+    wton: "",
+    tos: "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+    weth: "0x67F3bE272b1913602B191B3A68F7C238A2D81Bb9",
+    usdc: "0xD08a2917653d4E460893203471f0000826fb4034",
+    fee: 3000,
+    NonfungibleTokenPositionDescriptor: "0x174e97B891701D207BD48087Fe9e3b3d10ed7c99",
+    UniswapV3Staker: "",
+    ton: "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+    lockTOSaddr: "",
+    L2StandardTokenFactory: "0x4200000000000000000000000000000000000012"
+}
+
 let uniswapInfo = {
     "mainnet": uniswapInfo_mainnet,
     "goerli" : uniswapInfo_goerli,
@@ -96,6 +102,14 @@ const rpc_ndoe = {
     l2Url:  `https://goerli.optimism.tokamak.network`
 }
 const ERC20ABI = [
+   // decimals
+    {
+      constant: true,
+      inputs: [],
+      name: "decimals",
+      outputs: [{ name: "decimals", type: "uint256" }],
+      type: "function",
+    },
     // balanceOf
     {
       constant: true,

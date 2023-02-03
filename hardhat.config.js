@@ -15,9 +15,9 @@ module.exports = {
       chainId: 31337,
     },
     local: {
-      chainId: 31337,
+      chainId: 1337,
       url: `http://127.0.0.1:8545/`,
-      timeout: 200000,
+      timeout: 1000000,
       // accounts: [`${process.env.PRIVATE_KEY}`,`${process.env.LOCAL_KEY}`,`${process.env.LOCAL_KEY2}`,`${process.env.LOCAL_KEY3}`,`${process.env.LOCAL_KEY4}`,`${process.env.LOCAL_KEY5}`,`${process.env.LOCAL_KEY6}`,`${process.env.LOCAL_KEY7}`]
     },
     goerli: {
