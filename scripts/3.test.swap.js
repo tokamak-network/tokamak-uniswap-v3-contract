@@ -118,11 +118,15 @@ async function main() {
     accounts = await hre.ethers.getSigners();
     l2Signer = accounts[0]
 
+    console.log('ourAddr', ourAddr)
+
     TONContract = new ethers.Contract(TON, IERC20Artifact.abi, l2Signer)
     QuoterV2 = new ethers.Contract(QuoterV2Address, QuoterV2Artifact.abi, l2Signer)
     UniswapV3Factory = new ethers.Contract(UniswapV3FactoryAddress, UniswapV3FactoryArtifact.abi, l2Signer)
     SwapRouter = new ethers.Contract(SwapRouterAddress, SwapRouterArtifact.abi, l2Signer)
 
+    let SwapRouterCode = await ethers.provider.getCode(SwapRouterAddress);
+    console.log('SwapRouterCode', SwapRouterCode)
 
     const poolAddress = await UniswapV3Factory.getPool(TON, TOS, Fee);
     console.log("poolAddress", poolAddress);
