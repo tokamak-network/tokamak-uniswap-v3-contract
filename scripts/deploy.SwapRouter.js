@@ -16,11 +16,15 @@ async function main() {
   const SwapRouter = await hre.ethers.getContractFactory("SwapRouter");
   const swapRouter = await SwapRouter.deploy(_factory, _WETH9);
 
-  await swapRouter.deployed();
+  let tx = await swapRouter.deployed();
+
+  console.log(tx);
 
   console.log(
     `SwapRouter deployed to ${swapRouter.address}`
   );
+
+  console.log('finish');
 }
 
 // We recommend this pattern to be able to use async/await everywhere

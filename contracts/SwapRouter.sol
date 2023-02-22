@@ -16,6 +16,7 @@ import './libraries/Path.sol';
 import './libraries/PoolAddress.sol';
 import './libraries/CallbackValidation.sol';
 import './interfaces/external/IWETH9.sol';
+import "hardhat/console.sol";
 
 /// @title Uniswap V3 Swap Router
 /// @notice Router for stateless execution of swaps against Uniswap V3
@@ -45,6 +46,9 @@ contract SwapRouter is
         address tokenB,
         uint24 fee
     ) private view returns (IUniswapV3Pool) {
+        console.log("getPool tokenA %s" , tokenA);
+        console.log("getPool tokenB %s" , tokenB);
+        console.log("getPool fee %s" , fee);
         return IUniswapV3Pool(PoolAddress.computeAddress(factory, PoolAddress.getPoolKey(tokenA, tokenB, fee)));
     }
 
@@ -92,21 +96,34 @@ contract SwapRouter is
     ) private returns (uint256 amountOut) {
         // allow swapping to the router address with address 0
         if (recipient == address(0)) recipient = address(this);
+        console.log("exactInputInternal recipient %s ", recipient);
 
         (address tokenIn, address tokenOut, uint24 fee) = data.path.decodeFirstPool();
+        console.log("exactInputInternal tokenIn %s ", tokenIn);
+        console.log("exactInputInternal tokenOut %s ", tokenOut);
+        console.log("exactInputInternal fee %s ", fee);
 
         bool zeroForOne = tokenIn < tokenOut;
+        console.logBool(zeroForOne);
+
+        address pool = address(getPool(tokenIn, tokenOut, fee));
+        console.log("pool %s", pool);
+        console.logBytes(abi.encode(data));
+        uint256 _amountIn = amountIn;
 
         (int256 amount0, int256 amount1) =
             getPool(tokenIn, tokenOut, fee).swap(
                 recipient,
                 zeroForOne,
-                amountIn.toInt256(),
+                _amountIn.toInt256(),
                 sqrtPriceLimitX96 == 0
                     ? (zeroForOne ? TickMath.MIN_SQRT_RATIO + 1 : TickMath.MAX_SQRT_RATIO - 1)
                     : sqrtPriceLimitX96,
                 abi.encode(data)
             );
+
+        console.logInt(amount0);
+        console.logInt(amount1);
 
         return uint256(-(zeroForOne ? amount1 : amount0));
     }
@@ -137,9 +154,11 @@ contract SwapRouter is
         returns (uint256 amountOut)
     {
         address payer = msg.sender; // msg.sender pays for the first hop
+        console.log("payer %s", payer);
 
         while (true) {
             bool hasMultiplePools = params.path.hasMultiplePools();
+            console.logBool(hasMultiplePools);
 
             // the outputs of prior swaps become the inputs to subsequent ones
             params.amountIn = exactInputInternal(
@@ -158,6 +177,7 @@ contract SwapRouter is
                 params.path = params.path.skipToken();
             } else {
                 amountOut = params.amountIn;
+                console.log("amountOut %s", amountOut);
                 break;
             }
         }
