@@ -16,11 +16,18 @@ const IERC20Artifact = require("./abis/IERC20.json");
 // /// tokamak goerli
 const l1Url = `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
 const l2Url = `https://goerli.optimism.tokamak.network`
+//https://goerli.rpc.tokamak.network
+// const l2Url = `http://127.0.0.1:8545/`
+
 
 const QuoterV2Address = "0xbB4CD62E85eb9558BBC1b7b2cBFb15A55b347FbA";
 const UniswapV3FactoryAddress = "0x56F70e642886aAFEdc75ed7EEfA94dbbEbda280E";
 // const SwapRouterAddress = "0xd8EF9699eBc5b8357cbAaAbCa8af40141180aaB2";
-const SwapRouterAddress = "0x62cD88740F363b0558d20bfc5257431F049034dc";
+//const SwapRouterAddress = "0x62cD88740F363b0558d20bfc5257431F049034dc";
+// logs
+// const SwapRouterAddress = "0x83660630Dffb1f4ec15cEB3948849135da9E9d50";
+const SwapRouterAddress = "0x83660630Dffb1f4ec15cEB3948849135da9E9d50";
+// 0xaE42a54C8c3e045fb364560Aad1d77A008430615
 const UniswapV3PoolSwapTestAddress = "0x6159b5525d1Ebab5163f6A070D67C6F7F3C80753";
 
 const path = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2000bb850c5725949a6f0c72e6c4a641f24049a917db0cb";
@@ -69,8 +76,8 @@ async function main() {
     ourAddr = l2Signer.address
     console.log('ourAddr', ourAddr)
 
-    // let SwapRouterCode = await ethers.provider.getCode(SwapRouterAddress);
-    // console.log('SwapRouterCode', SwapRouterCode)
+    let SwapRouterCode = await ethers.provider.getCode(SwapRouterAddress);
+    console.log('SwapRouterCode', SwapRouterCode)
 
     TONContract = new ethers.Contract(TON, IERC20Artifact.abi, l2Signer)
     QuoterV2 = new ethers.Contract(QuoterV2Address, QuoterV2Artifact.abi, l2Signer)
