@@ -26,7 +26,7 @@ const UniswapV3FactoryAddress = "0x56F70e642886aAFEdc75ed7EEfA94dbbEbda280E";
 //const SwapRouterAddress = "0x62cD88740F363b0558d20bfc5257431F049034dc";
 // logs
 // const SwapRouterAddress = "0x83660630Dffb1f4ec15cEB3948849135da9E9d50";
-const SwapRouterAddress = "0x83660630Dffb1f4ec15cEB3948849135da9E9d50";
+const SwapRouterAddress = "0x9a8217328e17a80Ae38fEA18099cD1B8F89e6508";
 // 0xaE42a54C8c3e045fb364560Aad1d77A008430615
 const UniswapV3PoolSwapTestAddress = "0x6159b5525d1Ebab5163f6A070D67C6F7F3C80753";
 
@@ -72,9 +72,16 @@ const getSigners = async () => {
 
 async function main() {
 
-    const [l1Signer, l2Signer] = await getSigners()
-    ourAddr = l2Signer.address
-    console.log('ourAddr', ourAddr)
+    // const [l1Signer, l2Signer] = await getSigners()
+    // ourAddr = l2Signer.address
+    // console.log('ourAddr', ourAddr)
+
+    accounts = await hre.ethers.getSigners();
+    console.log('accounts[0]', accounts[0])
+
+    l2Signer = accounts[0]
+    ourAddr = accounts[0].address
+    console.log('ourAddr', accounts[0].address)
 
     let SwapRouterCode = await ethers.provider.getCode(SwapRouterAddress);
     console.log('SwapRouterCode', SwapRouterCode)
@@ -95,6 +102,9 @@ async function main() {
     UniswapV3Pool = new ethers.Contract(poolAddress, UniswapV3PoolArtifact.abi, l2Signer)
     const slot0 = await UniswapV3Pool.slot0();
     console.log("slot0", slot0);
+
+    const liquidity = await UniswapV3Pool.liquidity();
+    console.log("liquidity", liquidity.toString());
 
 
     let balanceBeforeTON = await TONContract.balanceOf(l2Signer.address);
