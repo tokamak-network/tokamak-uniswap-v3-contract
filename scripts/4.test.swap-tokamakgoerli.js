@@ -15,19 +15,15 @@ const IERC20Artifact = require("./abis/IERC20.json");
 
 // /// tokamak goerli
 const l1Url = `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
-const l2Url = `https://goerli.optimism.tokamak.network`
+// const l2Url = `https://goerli.optimism.tokamak.network`
 //https://goerli.rpc.tokamak.network
-// const l2Url = `http://127.0.0.1:8545/`
+const l2Url = `http://127.0.0.1:8545/`
 
+const QuoterV2Address = "0x42F685599d588727B28E3753Ab6A81d5b151C74E";
+const UniswapV3FactoryAddress = "0xfd64b1395D99B0b6b667Dc4C09C2AC3C264e28f9";
 
-const QuoterV2Address = "0xbB4CD62E85eb9558BBC1b7b2cBFb15A55b347FbA";
-const UniswapV3FactoryAddress = "0x56F70e642886aAFEdc75ed7EEfA94dbbEbda280E";
-// const SwapRouterAddress = "0xd8EF9699eBc5b8357cbAaAbCa8af40141180aaB2";
-//const SwapRouterAddress = "0x62cD88740F363b0558d20bfc5257431F049034dc";
-// logs
-// const SwapRouterAddress = "0x83660630Dffb1f4ec15cEB3948849135da9E9d50";
-const SwapRouterAddress = "0x9a8217328e17a80Ae38fEA18099cD1B8F89e6508";
-// 0xaE42a54C8c3e045fb364560Aad1d77A008430615
+const SwapRouterAddress = "0x5F4001362Fdb1eF3332AEB663FF67015b0f4E9e1";
+
 const UniswapV3PoolSwapTestAddress = "0x6159b5525d1Ebab5163f6A070D67C6F7F3C80753";
 
 const path = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2000bb850c5725949a6f0c72e6c4a641f24049a917db0cb";
@@ -71,18 +67,21 @@ const getSigners = async () => {
 }   // getSigners
 
 async function main() {
+  /*
+    const [l1Signer, l2Signer] = await getSigners()
+    ourAddr = l2Signer.address
+    console.log('ourAddr', ourAddr)
+    */
 
-    // const [l1Signer, l2Signer] = await getSigners()
-    // ourAddr = l2Signer.address
-    // console.log('ourAddr', ourAddr)
-
+    //-----------
     accounts = await hre.ethers.getSigners();
-    console.log('accounts[0]', accounts[0])
+
+    //console.log('accounts[0]', accounts[0])
 
     l2Signer = accounts[0]
     ourAddr = accounts[0].address
     console.log('ourAddr', accounts[0].address)
-
+    //-----------
     let SwapRouterCode = await ethers.provider.getCode(SwapRouterAddress);
     console.log('SwapRouterCode', SwapRouterCode)
 
@@ -139,21 +138,33 @@ async function main() {
       deadline,
     };
     console.log("params", params);
+
+
+
   /*
+
     const estimation = await SwapRouter.estimateGas.exactInput(
-        params
-    );
-    console.log("estimation", estimation);
-    let gas = estimation.toNumber() * 2;
-    console.log("gas", gas);
+      params
+  );
+  console.log("estimation", estimation);
+  let gas = estimation.toNumber() * 2;
+  console.log("gas", gas);
 
     const tx1 = await SwapRouter.connect(l2Signer).exactInput(params, {
       gasLimit: gas
     });
     */
-    const tx1 = await SwapRouter.connect(l2Signer).exactInput(params, {
-      gasLimit: 10000000
-    });
+
+    const tx1 = await SwapRouter.connect(l2Signer).exactInput(
+      params,
+      {
+        gasLimit: 200000,
+        gasPrice: 1
+      }
+    );
+
+    console.log("tx1", tx1);
+
     await tx1.wait();
 
     let balanceAfterTON = await TONContract.balanceOf(l2Signer.address);

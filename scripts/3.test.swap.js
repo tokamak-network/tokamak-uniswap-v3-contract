@@ -117,7 +117,7 @@ async function main() {
 
     accounts = await hre.ethers.getSigners();
     l2Signer = accounts[0]
-
+    ourAddr = accounts[0].address
     console.log('ourAddr', ourAddr)
 
     TONContract = new ethers.Contract(TON, IERC20Artifact.abi, l2Signer)
