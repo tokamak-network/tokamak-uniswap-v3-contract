@@ -46,11 +46,22 @@ const TickLens = require("../abis/TickLens.json");
 const UniswapInterfaceMulticall = require("../abis/UniswapInterfaceMulticall.json");
 const UniswapV3PoolArtifact = require("../abis/UniswapV3Pool.json");
 
+const l1Url = `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
+const l2Url = `https://goerli.optimism.tokamak.network`
+
+// Contract addresses for OPTb tokens, taken
+// from https://github.com/ethereum-optimism/ethereum-optimism.github.io/blob/master/data/OUTb/data.json
+
+const bridge = {
+  l1Bridge: "0x7377F3D0F64d7a54Cf367193eb74a052ff8578FD",
+  l2Bridge: "0x4200000000000000000000000000000000000010"
+}
+
 
 // Get an L2 signer
 const getSigner = async () => {
   // let endpointUrl = `https://goerli.optimism.tokamak.network`
-  let endpointUrl = `http://127.0.0.1:8545`
+  let endpointUrl = l1Url
 
     const l2RpcProvider = optimismSDK.asL2Provider(
       new ethers.providers.JsonRpcProvider(endpointUrl)
