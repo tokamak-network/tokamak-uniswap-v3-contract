@@ -1,3 +1,4 @@
+const hre = require("hardhat");
 const ethers = require("ethers")
 
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
