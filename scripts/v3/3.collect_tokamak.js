@@ -11,10 +11,10 @@ const UniswapV3FactoryAddress = '0x5CAd93cdC22B7B5A7Cc81CaA374520944505Af8d';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
 const Fee = ethers.BigNumber.from('3000');
-const UniswapV3Factory = require('../abis/UniswapV3Factory.json');
+const UniswapV3Factory = require('./abis/UniswapV3Factory.sol/UniswapV3Factory.json');
 const IERC20Artifact = require('../abis/IERC20.json');
-const UniswapV3PoolArtifact = require('../abis/UniswapV3Pool.json');
-const NonfungiblePositionManager = require('../abis/NonfungiblePositionManager.sol/NonfungiblePositionManager.json');
+const UniswapV3PoolArtifact = require('./abis/UniswapV3Pool.sol/UniswapV3Pool.json');
+const NonfungiblePositionManager = require('./abis/NonfungiblePositionManager.sol/NonfungiblePositionManager.json');
 
 async function main() {
   const accounts = await hre.ethers.getSigners();
@@ -93,7 +93,7 @@ async function main() {
 
   //============ See unclaimedFees
 
-  const positionInfo = await NonfungiblePositionManagerContract.positions(1);
+  
 
   //   /* GET ACCRUED UNCLAIMDED FEES */
   //   // callStatic simulates a call without state changes
@@ -107,7 +107,8 @@ async function main() {
   console.log('Fee1:', parseFloat(results.amount1));
 
   //=========collect Fee
-  if (parseFloat(results.amount0) > 0) {
+
+  if (parseFloat(results.amount0) > 0 || (results.amount1) > 0) {
     const tx = await NonfungiblePositionManagerContract.collect({
       tokenId: 1,
       recipient: deployer.address,
@@ -134,9 +135,14 @@ async function main() {
   }
 
   //===============burn liquidity
+
+  const tokenId = 2
+  const positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
+  console.log(positionInfo);
+
   if (positionInfo.liquidity > 0) {
     let tx = await NonfungiblePositionManagerContract.decreaseLiquidity({
-      tokenId: 1,
+      tokenId: tokenId,
       liquidity: positionInfo.liquidity,
       amount0Min: 0,
       amount1Min: 0,
@@ -145,8 +151,17 @@ async function main() {
     await tx.wait();
     let receipt = await providers.getTransactionReceipt(tx.hash);
     console.log('receipt', receipt);
+    
+    let balanceBeforeCollectFeeTON = await TONContract.balanceOf(
+      deployer.address
+    );
+    console.log('balanceBeforeBurnTON', balanceBeforeCollectFeeTON.toString());
+    let balanceBeforeCollectFeeTOS = await TOSContract.balanceOf(
+      deployer.address
+    );
+    console.log('balanceBeforeBurnTOS', balanceBeforeCollectFeeTOS.toString());
     tx = await NonfungiblePositionManagerContract.collect({
-      tokenId: 1,
+      tokenId: tokenId,
       recipient: deployer.address,
       amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
       amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),

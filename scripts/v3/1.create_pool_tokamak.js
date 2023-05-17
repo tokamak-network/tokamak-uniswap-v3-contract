@@ -9,12 +9,13 @@ const NonfungiblePositionManagerAddress =
 const UniswapV3FactoryAddress = '0x5CAd93cdC22B7B5A7Cc81CaA374520944505Af8d';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
+const LYDA = '0x3bB4445D30AC020a84c1b5A8A2C6248ebC9779D0';
 const Fee = ethers.BigNumber.from('3000');
 
 const IERC20Artifact = require('../abis/IERC20.json');
-const UniswapV3Factory = require('../abis/UniswapV3Factory.json');
-const NonfungiblePositionManager = require('../abis/NonfungiblePositionManager.sol/NonfungiblePositionManager.json');
-const UniswapV3PoolArtifact = require('../abis/UniswapV3Pool.json');
+const UniswapV3Factory = require('./abis/UniswapV3Factory.sol/UniswapV3Factory.json');
+const NonfungiblePositionManager = require('./abis/NonfungiblePositionManager.sol/NonfungiblePositionManager.json');
+const UniswapV3PoolArtifact = require('./abis/UniswapV3Pool.sol/UniswapV3Pool.json');
 
 async function main() {
   const accounts = await hre.ethers.getSigners();
@@ -38,10 +39,10 @@ async function main() {
   const UniswapV3FactoryContract = UniswapV3Factory_.attach(
     UniswapV3FactoryAddress
   );
-  const poolAddress = await UniswapV3FactoryContract.getPool(TON, TOS, Fee);
-  console.log('poolAddress', poolAddress);
-  let poolCode1 = await providers.getCode(poolAddress);
-  if (poolCode1 === '0x') console.log('poolAddress is null');
+  const poolAddressTOSTON = await UniswapV3FactoryContract.getPool(TON, TOS, Fee);
+  console.log('poolAddressTOSTON', poolAddressTOSTON);
+  let poolCode1 = await providers.getCode(poolAddressTOSTON);
+  if (poolCode1 === '0x') console.log('poolAddressTOSTON is null');
 
   let allowanceAmount = ethers.utils.parseEther('1000000000000'); //0 12개 + ether
 
@@ -95,7 +96,13 @@ async function main() {
     console.log('tx', tx);
     await tx.wait();
   }
-  if (poolAddress === '0x0000000000000000000000000000000000000000') {
+  const poolAddressLYDATOS = await UniswapV3FactoryContract.getPool(LYDA, TOS, Fee);
+  console.log('poolAddressLYDATOS', poolAddressLYDATOS);
+  let poolCode2 = await providers.getCode(poolAddressLYDATOS);
+  if (poolCode2 === '0x') console.log('poolAddressLYDATOS is null');
+
+
+  if (poolAddressTOSTON === '0x0000000000000000000000000000000000000000') {
     const tx1 = await UniswapV3FactoryContract.createPool(TON, TOS, Fee);
     console.log('createPool', tx1);
     await tx1.wait();
@@ -111,20 +118,20 @@ async function main() {
     // console.log('event', event);
     // console.log('event.pool', event.pool);
 
-    // poolAddress = event.pool;
+    // poolAddressTOSTON = event.pool;
     process.exitCode = 1;
   }
 
   let sqrtPriceX96 = ethers.constants.Zero;
   let tick = 0;
   let UniswapV3PoolContract = null;
-  if (poolAddress !== '0x0000000000000000000000000000000000000000') {
+  if (poolAddressTOSTON !== '0x0000000000000000000000000000000000000000') {
     const UniswapV3Pool_ = new ethers.ContractFactory(
       UniswapV3PoolArtifact.abi,
       UniswapV3PoolArtifact.bytecode,
       deployer
     );
-    UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddress);
+    UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressTOSTON);
 
     let slot0 = await UniswapV3PoolContract.slot0();
     console.log('slot0', slot0);
@@ -135,7 +142,7 @@ async function main() {
     console.log('liquidity', liquidity);
   }
   if (
-    poolAddress !== '0x0000000000000000000000000000000000000000' &&
+    poolAddressTOSTON !== '0x0000000000000000000000000000000000000000' &&
     sqrtPriceX96.eq(ethers.constants.Zero)
   ) {
     if (UniswapV3PoolContract == null) {
@@ -144,7 +151,7 @@ async function main() {
         UniswapV3PoolArtifact.bytecode,
         deployer
       );
-      UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddress);
+      UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressTOSTON);
     }
     let tx2 = await UniswapV3PoolContract.initialize(encodePriceSqrt(1, 1));
     console.log('initialize', tx2);
@@ -152,7 +159,7 @@ async function main() {
   }
 
   if (
-    poolAddress !== '0x0000000000000000000000000000000000000000' &&
+    poolAddressTOSTON !== '0x0000000000000000000000000000000000000000' &&
     sqrtPriceX96.gt(ethers.constants.Zero)
   ) {
     if (UniswapV3PoolContract == null) {
@@ -161,7 +168,7 @@ async function main() {
         UniswapV3PoolArtifact.bytecode,
         deployer
       );
-      UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddress);
+      UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressTOSTON);
     }
     let liquidity = await UniswapV3PoolContract.liquidity();
     console.log('liquidity : ', liquidity);
