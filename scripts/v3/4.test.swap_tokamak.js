@@ -5,10 +5,10 @@ const { FeeAmount, encodePriceSqrt, encodePath } = require('../utils');
 const hre = require('hardhat');
 
 const NonfungiblePositionManagerAddress =
-  '0x709C67488edC9fd8BdAf267BFA276B49CD62c217';
-const UniswapV3FactoryAddress = '0x5CAd93cdC22B7B5A7Cc81CaA374520944505Af8d';
+  '0xD7aDF2d7DB274d568399a740801c7e6Ff47e3642';
+const UniswapV3FactoryAddress = '0x58314293cD17E5d7A4C12134e69690e3A740266E';
 
-const SwapRouterAddress = '0x898250afef5611fB9D16B992fA0cABb12966e978';
+const SwapRouterAddress = '0x97ef0aB96AbF9C67ad1C72fe2ceCeC3a1616d38A';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
 const Fee = ethers.BigNumber.from('3000');
@@ -78,7 +78,7 @@ async function main() {
   console.log('allowance 1 TON ', allowance.toString());
   console.log('allowanceAmount ', allowanceAmount);
 
-  if (allowance.lt(allowanceAmount)) {
+  if (allowance.lt(ethers.utils.parseEther('1'))) {
     const tx = await TONContract.approve(SwapRouterAddress, allowanceAmount);
     console.log('tx', tx);
     await tx.wait();
@@ -100,7 +100,7 @@ async function main() {
   allowance = await TOSContract.allowance(deployer.address, SwapRouterAddress);
   console.log('allowance 1 TOS ', allowance);
 
-  if (allowance.lt(allowanceAmount)) {
+  if (allowance.lt(ethers.utils.parseEther('1'))) {
     const tx = await TOSContract.approve(SwapRouterAddress, allowanceAmount);
     console.log('tx', tx);
     await tx.wait();

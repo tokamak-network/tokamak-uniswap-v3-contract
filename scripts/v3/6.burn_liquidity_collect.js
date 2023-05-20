@@ -6,8 +6,8 @@ const { FeeAmount, encodePriceSqrt, encodePath } = require('../utils');
 const hre = require('hardhat');
 
 const NonfungiblePositionManagerAddress =
-  '0x709C67488edC9fd8BdAf267BFA276B49CD62c217';
-const UniswapV3FactoryAddress = '0x5CAd93cdC22B7B5A7Cc81CaA374520944505Af8d';
+  '0xD7aDF2d7DB274d568399a740801c7e6Ff47e3642';
+const UniswapV3FactoryAddress = '0x58314293cD17E5d7A4C12134e69690e3A740266E';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
 const Fee = ethers.BigNumber.from('3000');
@@ -94,11 +94,12 @@ async function main() {
   //============ See unclaimedFees
 
   
+  const tokenId = 1
 
   //   /* GET ACCRUED UNCLAIMDED FEES */
   //   // callStatic simulates a call without state changes
   var results = await NonfungiblePositionManagerContract.callStatic.collect({
-    tokenId: 1,
+    tokenId: tokenId,
     recipient: deployer.address,
     amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
     amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
@@ -106,37 +107,8 @@ async function main() {
   console.log('Fee0:', parseFloat(results.amount0));
   console.log('Fee1:', parseFloat(results.amount1));
 
-  //=========collect Fee
-
-  if (parseFloat(results.amount0) > 0 || (results.amount1) > 0) {
-    const tx = await NonfungiblePositionManagerContract.collect({
-      tokenId: 1,
-      recipient: deployer.address,
-      amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
-      amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
-    });
-    await tx.wait();
-    const receipt = await providers.getTransactionReceipt(tx.hash);
-    console.log('receipt', receipt);
-    let balanceAfterCollectFeeTON = await TONContract.balanceOf(
-      deployer.address
-    );
-    console.log(
-      'balanceAfterCollectFeeTON',
-      balanceAfterCollectFeeTON.toString()
-    );
-    let balanceAfterCollectFeeTOS = await TOSContract.balanceOf(
-      deployer.address
-    );
-    console.log(
-      'balanceAfterCollectFeeTOS',
-      balanceAfterCollectFeeTOS.toString()
-    );
-  }
-
   //===============burn liquidity
 
-  const tokenId = 2
   const positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   console.log(positionInfo);
 
@@ -152,14 +124,6 @@ async function main() {
     let receipt = await providers.getTransactionReceipt(tx.hash);
     console.log('receipt', receipt);
     
-    let balanceBeforeCollectFeeTON = await TONContract.balanceOf(
-      deployer.address
-    );
-    console.log('balanceBeforeBurnTON', balanceBeforeCollectFeeTON.toString());
-    let balanceBeforeCollectFeeTOS = await TOSContract.balanceOf(
-      deployer.address
-    );
-    console.log('balanceBeforeBurnTOS', balanceBeforeCollectFeeTOS.toString());
     tx = await NonfungiblePositionManagerContract.collect({
       tokenId: tokenId,
       recipient: deployer.address,
