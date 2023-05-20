@@ -19,7 +19,7 @@
   "dependencies": {
     "@eth-optimism/contracts": "^0.5.11",
     "@eth-optimism/sdk": "^1.8.0",
-    "@justin-gee/uniswap-tokamak-hardhat-v3-deploy": "^1.0.5",
+    "@justin-gee/uniswap-tokamak-hardhat-v3-deploy": "^1.0.7",
     "@openzeppelin/contracts": "^4.7.3",
     "@thanpolas/univ3prices": "^3.0.2",
     "@uniswap/hardhat-v3-deploy": "^0.1.1",
@@ -41,7 +41,7 @@
     "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "^2.2.2",
-    "@nomiclabs/hardhat-etherscan": "^3.1.2",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@typechain/ethers-v5": "^10.1.1",
     "@typechain/hardhat": "^6.1.4",
     "@types/mocha": "^9.1.1",
