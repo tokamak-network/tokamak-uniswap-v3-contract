@@ -444,15 +444,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@justin-gee/uniswap-tokamak-hardhat-v3-deploy@^1.0.7":
-  "integrity" "sha512-zbEYNkEf+TFf+9Knupr/oVU2uDfsg3TcjY7pt5K0ACLSu3B/T7X1niKiIy6Q+sU5psDMEvHwxuNFpj+14SU9LA=="
-  "resolved" "https://registry.npmjs.org/@justin-gee/uniswap-tokamak-hardhat-v3-deploy/-/uniswap-tokamak-hardhat-v3-deploy-1.0.7.tgz"
-  "version" "1.0.7"
-  dependencies:
-    "@uniswap/v3-core" "1.0.2-solc-0.8-simulate"
-    "@uniswap/v3-periphery" "1.4.3"
-    "cli-table3" "^0.6.0"
-
 "@metamask/eth-sig-util@^4.0.0":
   "integrity" "sha512-tghyZKLHZjcdlDqCA3gNZmLeR0XvOE9U1qoQO9ohyAZT6Pya+H9vkBPcsyXytmYLNgVoin7CKCmweo/R43V+tQ=="
   "resolved" "https://registry.npmjs.org/@metamask/eth-sig-util/-/eth-sig-util-4.0.1.tgz"
@@ -882,6 +873,15 @@
     "@thanpolas/crypto-utils" "^0.3.1"
     "invariant" "^2.2.4"
     "jsbi" "^3.2.2"
+
+"@tokamak-network/tokamak-uniswap-v3-deploy@^1.0.4":
+  "integrity" "sha512-Hl35Z9pYuTnwRPKAzcnLF0ul1W5ZcvyFs4pzx7lgMowazEsyqn3kbkNMFqm3IueSRuov667h4ibsIoJBfOLuXA=="
+  "resolved" "https://registry.npmjs.org/@tokamak-network/tokamak-uniswap-v3-deploy/-/tokamak-uniswap-v3-deploy-1.0.4.tgz"
+  "version" "1.0.4"
+  dependencies:
+    "@uniswap/v3-core" "1.0.2-solc-0.8-simulate"
+    "@uniswap/v3-periphery" "1.4.3"
+    "cli-table3" "^0.6.0"
 
 "@truffle/error@^0.1.1":
   "integrity" "sha512-sE7c9IHIGdbK4YayH4BC8i8qMjoAOeg6nUXUDZZp8wlU21/EMpaG+CLx+KqcIPyR+GSWIW3Dm0PXkr2nlggFDA=="

@@ -19,9 +19,9 @@
   "dependencies": {
     "@eth-optimism/contracts": "^0.5.11",
     "@eth-optimism/sdk": "^1.8.0",
-    "@justin-gee/uniswap-tokamak-hardhat-v3-deploy": "^1.0.7",
     "@openzeppelin/contracts": "^4.7.3",
     "@thanpolas/univ3prices": "^3.0.2",
+    "@tokamak-network/tokamak-uniswap-v3-deploy": "^1.0.4",
     "@uniswap/hardhat-v3-deploy": "^0.1.1",
     "@uniswap/v3-sdk": "^3.9.0",
     "axios": "^1.4.0",
