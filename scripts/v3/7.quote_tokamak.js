@@ -1,26 +1,9 @@
 
 const ethers = require("ethers")
-
 require('dotenv').config()
-
 const { FeeAmount, encodePriceSqrt, encodePath } = require("../utils");
 const hre = require("hardhat");
-
-
-/*
-WETH9 deployed to 0x04C91015CC8910B031F2399E04802b51bf6582A1
-UniswapV3Factory deployed to 0x79d6318807A4d031eC4a896e3A079E115399fbcD
-
-SwapRouter deployed to 0x477935284f9310d036C3DAABdc751E94C404fcCB
-NFTDescriptor deployed to 0xE32B142dBb6cAE60447284D598530677cA1505f0
-NonfungibleTokenPositionDescriptor deployed to 0x95AC058b12C1A43368758C0dda2a12ceFe6ad5f7
-NonfungiblePositionManager deployed to 0x6A4514861c59Eb3F046Be89D47dD3123B159E768
-Quoter deployed to 0xAC49B1F2Bf9AaC284609abF5eb1b90f352b18a77
-QuoterV2 deployed to 0xD073E3ad1B4603cF6B5AA9aFc11B31529A2D213D
-TickLens deployed to 0xCf1AADc5E8e7e8bC52204f06F1414FBA99e6f932
-UniswapInterfaceMulticall deployed to 0x4D2cfb9300f58225057c9c139B459c2B64bA5681
-*/
-const QuoteAddress = "0xF0ecc7Ef16d4cB890d4B6714DF4fDFF215566633";
+const QuoteAddress = "0xd71774356db1036148DFB418EE709933F963B603";
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
 const TOS = "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
 const Fee = ethers.BigNumber.from("3000")
@@ -28,11 +11,9 @@ const QuoterArtifact = require("./abis/Quoter.sol/Quoter.json");
 
 
 async function main() {
-
   const accounts = await hre.ethers.getSigners();
   const deployer = accounts[0];
   providers = hre.ethers.provider;
-
   console.log("deployer", deployer.address);
 
   ///=========== Quote
@@ -44,13 +25,28 @@ async function main() {
   if (qouteCode === '0x')  console.log('Quoter is null')
 
   const amountIn = ethers.utils.parseEther("1");
-  const path = encodePath([TOS, TON], [3000]);
-
-  const amountOut = await Quoter.callStatic.quoteExactInput(path, amountIn, {
-    gasLimit: 3000000
-  });
-
-  console.log("amountOut", amountOut.toString());
+  //const path = encodePath([TOS, TON], [3000]);
+  // const path = encodePath([TON, TOS], [3000]);
+  // const amountOut = await Quoter.callStatic.quoteExactInput(path, amountIn, {
+  //   gasLimit: 3000000
+  // });
+  // console.log("amountOut", amountOut.toString());
+  const quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+    TOS,
+    TON,
+    Fee,
+    ethers.utils.parseEther("1"),
+    0
+  )
+  console.log("amountOut1", quotedAmountOut1.toString());
+  const quotedAmountOut2 = await Quoter.callStatic.quoteExactInputSingle(
+    TON,
+    TOS,
+    Fee,
+    ethers.utils.parseEther("1"),
+    0
+  )
+  console.log("amountOut2", quotedAmountOut2.toString());
 
 }
 

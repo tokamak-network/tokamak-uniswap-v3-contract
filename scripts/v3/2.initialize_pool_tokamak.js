@@ -5,8 +5,8 @@ const { FeeAmount, encodePriceSqrt, encodePath } = require('../utils');
 const hre = require('hardhat');
 
 const NonfungiblePositionManagerAddress =
-  '0xD7aDF2d7DB274d568399a740801c7e6Ff47e3642';
-const UniswapV3FactoryAddress = '0x58314293cD17E5d7A4C12134e69690e3A740266E';
+  '0x0653692451011e5d9921E30193603321929fE4ef';
+const UniswapV3FactoryAddress = '0x31eac92F79C2B3232174C2d5Ad4DBf810022E807';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
 const LYDA = '0x3bB4445D30AC020a84c1b5A8A2C6248ebC9779D0';
@@ -67,6 +67,20 @@ async function main() {
   }
   
   console.log('poolAddressTOSTON', poolAddressTOSTON);
+
+  if (poolAddressTOSTON !== '0x0000000000000000000000000000000000000000'
+    && sqrtPriceX96.eq(ethers.constants.Zero) ) {
+    if(UniswapV3PoolContract == null) {
+      const UniswapV3Pool_ = new ethers.ContractFactory(
+        UniswapV3PoolArtifact.abi, UniswapV3PoolArtifact.bytecode, deployer)
+      UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressTOSTON);
+    }
+
+    let tx2 = await UniswapV3PoolContract.initialize(encodePriceSqrt(1.18559, 1));
+    console.log("initialize", tx2);
+    await tx2.wait();
+  }
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
