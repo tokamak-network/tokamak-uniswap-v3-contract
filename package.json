@@ -29,7 +29,7 @@
     "bn.js": "^5.2.1",
     "dotenv": "^16.0.3",
     "eth-gas-reporter": "^0.2.25",
-    "jsbi": "^4.3.0",
+    "jsbi": "^3.2.5",
     "lodash": "^4.17.21",
     "stream": "^0.0.2",
     "uniswap-v3-deploy-plugin": "^0.1.0"

@@ -8,7 +8,7 @@ const NonfungiblePositionManagerAddress =
   '0x0653692451011e5d9921E30193603321929fE4ef';
 const UniswapV3FactoryAddress = '0x31eac92F79C2B3232174C2d5Ad4DBf810022E807';
 
-const SwapRouterAddress = '0x97ef0aB96AbF9C67ad1C72fe2ceCeC3a1616d38A';
+const SwapRouterAddress = '0x917eEAEd0018bCb287bA6B961aB6c2d9DAa4a362';
 const TON = '0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2';
 const TOS = '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb';
 const Fee = ethers.BigNumber.from('3000');

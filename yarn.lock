@@ -4108,25 +4108,10 @@
   dependencies:
     "argparse" "^2.0.1"
 
-"jsbi@^3.1.4":
+"jsbi@^3.1.4", "jsbi@^3.1.6", "jsbi@^3.2.2", "jsbi@^3.2.5":
   "integrity" "sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ=="
   "resolved" "https://registry.npmjs.org/jsbi/-/jsbi-3.2.5.tgz"
   "version" "3.2.5"
-
-"jsbi@^3.1.6":
-  "integrity" "sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ=="
-  "resolved" "https://registry.npmjs.org/jsbi/-/jsbi-3.2.5.tgz"
-  "version" "3.2.5"
-
-"jsbi@^3.2.2":
-  "integrity" "sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ=="
-  "resolved" "https://registry.npmjs.org/jsbi/-/jsbi-3.2.5.tgz"
-  "version" "3.2.5"
-
-"jsbi@^4.3.0":
-  "integrity" "sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g=="
-  "resolved" "https://registry.npmjs.org/jsbi/-/jsbi-4.3.0.tgz"
-  "version" "4.3.0"
 
 "jsbn@~0.1.0":
   "integrity" "sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg=="
