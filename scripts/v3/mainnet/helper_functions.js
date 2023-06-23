@@ -167,6 +167,7 @@ async function exit(
   amount1Min,
   recipient
 ) {
+  let providers = hre.ethers.provider;
   const decreaseLiquidityData = nft.interface.encodeFunctionData(
     'decreaseLiquidity',
     [
@@ -214,6 +215,7 @@ async function exitForETH(
   recipient,
   sweepTokenAddress
 ) {
+  let providers = hre.ethers.provider;
   const decreaseLiquidityData = nft.interface.encodeFunctionData(
     'decreaseLiquidity',
     [
