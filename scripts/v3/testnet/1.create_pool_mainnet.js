@@ -19,7 +19,6 @@ async function main() {
   const TOSContract = await getContract('TOS');
   ///=============== WETHContract  
   const WETHContract = await getContract('WETH');
-  
 
   let allowanceAmount = ethers.utils.parseEther('1000000000000'); //0 12개 ether
   let minimumallowanceAmount = ethers.utils.parseEther('100000000000'); //0 11개 ether

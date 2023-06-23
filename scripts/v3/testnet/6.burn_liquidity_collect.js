@@ -3,7 +3,7 @@ require('dotenv').config();
 const hre = require('hardhat');
 const JSBI = require('jsbi') // jsbi@3.2.5
 const {NonfungiblePositionManager: NonfungiblePositionManagerAddress, getContract, getPoolContractAddress, Fee, deployContract} = require("./constant.js");
-const UniswapV3PoolArtifact = require('./../abis/UniswapV3Pool.sol/UniswapV3Pool.json');
+const UniswapV3PoolArtifact = require('../abis/UniswapV3Pool.sol/UniswapV3Pool.json');
 
 
 async function main() {
@@ -68,7 +68,7 @@ async function main() {
   
 
 
-async function exit(
+async function exit( //ERC20으로 바등ㄹ떄
   nft,
   liquidity,
   tokenId,

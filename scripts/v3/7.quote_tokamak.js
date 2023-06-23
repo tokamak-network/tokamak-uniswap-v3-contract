@@ -3,12 +3,14 @@ const ethers = require("ethers")
 require('dotenv').config()
 const { FeeAmount, encodePriceSqrt, encodePath } = require("../utils");
 const hre = require("hardhat");
-const QuoteAddress = "0xd71774356db1036148DFB418EE709933F963B603";
-const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
-const TOS = "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
+const QuoteAddress = "0xE3a8EbF3f0bC0f752C44737533E4a5273b201dE4";
+const TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
+const WETH = "0x4200000000000000000000000000000000000006";
+const TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
 const Fee = ethers.BigNumber.from("3000")
 const QuoterArtifact = require("./abis/Quoter.sol/Quoter.json");
-
+const USDC = '0x9c53338c48181035D96884946C34ea81818F743C';
+const USDT = '0xd1e405F1154BE88aC84f748C1BcE22442B12309F';
 
 async function main() {
   const accounts = await hre.ethers.getSigners();
@@ -31,19 +33,20 @@ async function main() {
   //   gasLimit: 3000000
   // });
   // console.log("amountOut", amountOut.toString());
+  
   const quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
-    TOS,
-    TON,
-    Fee,
-    ethers.utils.parseEther("1"),
+    WETH,
+    USDC,
+    100,
+    ethers.utils.parseEther('1'),
     0
   )
   console.log("amountOut1", quotedAmountOut1.toString());
   const quotedAmountOut2 = await Quoter.callStatic.quoteExactInputSingle(
-    TON,
-    TOS,
-    Fee,
-    ethers.utils.parseEther("1"),
+    USDC,
+    WETH,
+    100,
+    ethers.utils.parseUnits('1', 6),
     0
   )
   console.log("amountOut2", quotedAmountOut2.toString());

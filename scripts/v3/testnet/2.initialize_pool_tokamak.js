@@ -4,8 +4,8 @@ require('dotenv').config();
 const hre = require('hardhat');
 const {NonfungiblePositionManager: NonfungiblePositionManagerAddress, getContract, getPoolContractAddress, Fee, deployContract} = require("./constant.js");
 const { expect } = require("chai");
-const {encodePriceSqrt} = require('../../utils');
-const UniswapV3PoolArtifact = require('./../abis/UniswapV3Pool.sol/UniswapV3Pool.json');
+const {encodePriceSqrt} = require('../../utils.js');
+const UniswapV3PoolArtifact = require('../abis/UniswapV3Pool.sol/UniswapV3Pool.json');
 
 async function main() {
   const accounts = await hre.ethers.getSigners();
