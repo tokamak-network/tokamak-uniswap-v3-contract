@@ -11,8 +11,6 @@ const Fee = ethers.BigNumber.from('3000');
 
 async function main() {
   const chainName = hre.network.name;
-  if (chainName === 'localhost') {
-  }
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
   providers = hre.ethers.provider;
@@ -28,6 +26,7 @@ async function main() {
   const NonfungiblePositionManagerContract = (
     await getContract('NonfungiblePositionManager')
   ).connect(deployer);
+  console.log('');
   ///=============== TONContract
   const TONContract = await getContract('TON');
   const TONAddress = TONContract.address;
