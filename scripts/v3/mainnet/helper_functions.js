@@ -94,8 +94,7 @@ const getContract = async (contractName) => {
   if (
     contractName === 'TON' ||
     contractName === 'TOS' ||
-    contractName === 'WETH' ||
-    contractName === 'USDT'
+    contractName === 'WETH'
   ) {
     jsonFile = JSON.parse(
       fs.readFileSync(__dirname + '/../../abis/IERC20.json').toString()

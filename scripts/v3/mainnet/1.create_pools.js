@@ -75,19 +75,19 @@ async function main() {
   );
 
   if (poolAddressTOSTON === '0x0000000000000000000000000000000000000000') {
-    //1 WTON = 0.7489 TOS
-    //1 TOS = 1.3352 WTON
+    //1 WTON = 0.75058 TOS
+    //1 TOS = 1.3323 WTON
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (TONAddress < TOSAddress) {
       token0 = TONAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 0.7489;
+      reserve1 = 0.75058;
     } else {
       token0 = TOSAddress;
       reserve0 = 1;
       token1 = TONAddress;
-      reserve1 = 1.3352;
+      reserve1 = 1.3323;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
     console.log('======createAndInitialize poolAddressWETHTON=======');
@@ -103,16 +103,16 @@ async function main() {
 
   if (poolAddressWETHTOS === '0x0000000000000000000000000000000000000000') {
     //1 TOS = 0.0011 ETH
-    //1 ETH = 928.7 TOS
+    //1 ETH = 912.128 TOS
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < TOSAddress) {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 928.7;
+      reserve1 = 912.128;
     } else {
       token0 = TOSAddress;
-      reserve0 = 928.7;
+      reserve0 = 912.128;
       token1 = WETHAddress;
       reserve1 = 1;
     }
@@ -129,17 +129,17 @@ async function main() {
   }
 
   if (poolAddressWETHTON === '0x0000000000000000000000000000000000000000') {
-    //1 ETH = 1250 TON
-    //1 TON = 0.0008 ETH
+    //1 ETH = 1,231.38 WTON TON
+    //1 WTON = 0.00081 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < TONAddress) {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TONAddress;
-      reserve1 = 1250;
+      reserve1 = 1,231.38;
     } else {
       token0 = TONAddress;
-      reserve0 = 1250;
+      reserve0 = 1,231.38;
       token1 = WETHAddress;
       reserve1 = 1;
     }
@@ -156,20 +156,20 @@ async function main() {
   }
 
   if (poolAddressWETHUSDC === '0x0000000000000000000000000000000000000000') {
-    //1 ETH = 1,917.80 USDC
-    //1000000000 000000000 == 1.917800000
+    //1 ETH = 1,853.50 USDC
+    //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
-    // 1 USDC = 0.00052 ETH
-    // 1USDC = 520000000 ETH
+    // 1 USDC = 0.00054 ETH ETH
+    // 1USDC = 540000000 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < USDCAddress) {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDCAddress;
-      reserve1 = 1.9178;
+      reserve1 = 1.8535;
     } else {
       token0 = USDCAddress;
-      reserve0 = 1.9178;
+      reserve0 = 1.8535;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }
@@ -186,20 +186,20 @@ async function main() {
   }
 
   if (poolAddressWETHUSDT === '0x0000000000000000000000000000000000000000') {
-    //1 ETH = 1,917.80 USDC
-    //1000000000 000000000 == 1.917800000
+    //1 ETH = 1,853.50 USDC
+    //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
-    // 1 USDC = 0.00052 ETH
-    // 1USDC = 520000000 ETH
+    // 1 USDC = 0.00054 ETH ETH
+    // 1USDC = 540000000 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < USDTAddress) {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDTAddress;
-      reserve1 = 1.9178;
+      reserve1 = 1.8535;
     } else {
       token0 = USDTAddress;
-      reserve0 = 1.9178;
+      reserve0 = 1.8535;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }

@@ -13,14 +13,10 @@ async function main() {
   let deployer = accounts[0];
   providers = hre.ethers.provider;
   let totalGasUsed = ethers.BigNumber.from('0');
-  if (chainName === 'hardhat')
-    deployer = await hre.ethers.getImpersonatedSigner(
-      '0xB68AA9E398c054da7EBAaA446292f611CA0CD52B'
-    );
-  ///=========== UniswapV3Factory
 
-  const UniswapV3FactoryContract = await getContract('UniswapV3Factory');
-  let tx = await UniswapV3FactoryContract.setOwner(deployer.address);
+  ///=========== UniswapV3Factory
+  const UniswapV3FactoryContract = (await getContract('UniswapV3Factory')).connect(deployer);
+  let tx = await UniswapV3FactoryContract.setOwner('0x340C44089bc45F86060922d2d89eFee9e0CDF5c7');
   await tx.wait();
   const receipt = await providers.getTransactionReceipt(tx.hash);
   console.log('transactionHash:', receipt.transactionHash);

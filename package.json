@@ -23,6 +23,7 @@
     "@thanpolas/univ3prices": "^3.0.2",
     "@tokamak-network/tokamak-uniswap-v3-deploy": "^1.0.4",
     "@uniswap/hardhat-v3-deploy": "^0.1.1",
+    "@uniswap/smart-order-router": "^3.13.2-hotfix2",
     "@uniswap/v3-sdk": "^3.9.0",
     "axios": "^1.4.0",
     "bignumber.js": "^9.0.2",
