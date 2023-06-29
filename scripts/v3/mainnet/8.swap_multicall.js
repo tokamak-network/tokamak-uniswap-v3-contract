@@ -94,9 +94,9 @@ async function main() {
     const TOSContract = await getContract('TOS');
     const TOSAddress = TOSContract.address;
   ///=============== SwapRouterContract  
-  const SwapRouterContract = await getContract('SwapRouter');
+  const SwapRouterContract = await getContract('SwapRouter02');
   const SwapRouterAddress = SwapRouterContract.address;
-  
+  console.log(SwapRouterAddress);
   let poolAddressTOSTON = await getPoolContractAddress(UniswapV3FactoryContract, TONAddress, TOSAddress, 3000);
   let poolAddressWETHTON = await getPoolContractAddress(UniswapV3FactoryContract, WETHAddress, TONAddress, 3000);
   
@@ -111,7 +111,6 @@ async function main() {
 
   let deadline = Date.now() + 100000;
   console.log(deadline);
-  let amountIn = ethers.utils.parseEther('1');
   let routePath;
   let paths = [];
   let fees = [];
@@ -155,9 +154,18 @@ async function main() {
 //     const burnData = nft.interface.encodeFunctionData('burn', [tokenId]);
 //   }
   console.log(swapData);
+  console.log(SwapRouterContract);
+  const encMultiCall = SwapRouterContract.interface.encodeFunctionData('multicall(bytes[] calldata data)', [swapData])
   try {
     // const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-    const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+    //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+    const txArgs = {
+        to: SwapRouterContract.address,
+        from: deployer.address,
+        data: encMultiCall,
+        gasLimit: 300000,
+    }
+    const tx = await deployer.sendTransaction(txArgs)
     await tx.wait();
     const receipt = await providers.getTransactionReceipt(tx.hash);
     console.log(receipt);

@@ -23,7 +23,7 @@ async function main() {
     );
   ///=============== NonfungiblePositionManagerContract
   const SwapRouterContract = await getContract(
-    'SwapRouter'
+    'SwapRouter02'
   );
   const SwapRouterAddress =
   SwapRouterContract.address;
