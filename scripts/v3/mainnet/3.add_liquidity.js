@@ -104,29 +104,29 @@ async function main() {
     Fee
   );
 
-  // TOS/TON addLiquidity
-  console.log('====== poolAddressTOSTON mint ==========');
-  let token0, token1, amount0Desired, amount1Desired;
-  if (TONAddress < TOSAddress) {
-    token0 = TONAddress;
-    amount0Desired = ethers.utils.parseEther('35');
-    token1 = TOSAddress;
-    amount1Desired = ethers.utils.parseEther('25');
-  } else {
-    token0 = TOSAddress;
-    amount0Desired = ethers.utils.parseEther('25');
-    token1 = TONAddress;
-    amount1Desired = ethers.utils.parseEther('35');
-  }
-  await addLiquidity(
-    NonfungiblePositionManagerContract,
-    poolAddressTOSTON,
-    token0,
-    token1,
-    amount0Desired,
-    amount1Desired,
-    deployer
-  );
+  // // TOS/TON addLiquidity
+  // console.log('====== poolAddressTOSTON mint ==========');
+  // let token0, token1, amount0Desired, amount1Desired;
+  // if (TONAddress < TOSAddress) {
+  //   token0 = TONAddress;
+  //   amount0Desired = ethers.utils.parseEther('35');
+  //   token1 = TOSAddress;
+  //   amount1Desired = ethers.utils.parseEther('25');
+  // } else {
+  //   token0 = TOSAddress;
+  //   amount0Desired = ethers.utils.parseEther('25');
+  //   token1 = TONAddress;
+  //   amount1Desired = ethers.utils.parseEther('35');
+  // }
+  // await addLiquidity(
+  //   NonfungiblePositionManagerContract,
+  //   poolAddressTOSTON,
+  //   token0,
+  //   token1,
+  //   amount0Desired,
+  //   amount1Desired,
+  //   deployer
+  // );
 
   // ETH/TON addLiquidity
   console.log('====== poolAddressWETHTON mint ==========');
@@ -151,74 +151,74 @@ async function main() {
     deployer
   );
 
-  // ETH/TOS addLiquidity
-  console.log('====== poolAddressWETHTOS mint ==========');
-  if (TOSAddress < WETHAddress) {
-    token0 = TOSAddress;
-    amount0Desired = ethers.utils.parseEther('25');
-    token1 = WETHAddress;
-    amount1Desired = ethers.utils.parseEther('0.028');
-  } else {
-    token0 = WETHAddress;
-    amount0Desired = ethers.utils.parseEther('0.028');
-    token1 = TOSAddress;
-    amount1Desired = ethers.utils.parseEther('25');
-  }
-  await addLiquidity(
-    NonfungiblePositionManagerContract,
-    poolAddressWETHTOS,
-    token0,
-    token1,
-    amount0Desired,
-    amount1Desired,
-    deployer
-  );
+  // // ETH/TOS addLiquidity
+  // console.log('====== poolAddressWETHTOS mint ==========');
+  // if (TOSAddress < WETHAddress) {
+  //   token0 = TOSAddress;
+  //   amount0Desired = ethers.utils.parseEther('25');
+  //   token1 = WETHAddress;
+  //   amount1Desired = ethers.utils.parseEther('0.028');
+  // } else {
+  //   token0 = WETHAddress;
+  //   amount0Desired = ethers.utils.parseEther('0.028');
+  //   token1 = TOSAddress;
+  //   amount1Desired = ethers.utils.parseEther('25');
+  // }
+  // await addLiquidity(
+  //   NonfungiblePositionManagerContract,
+  //   poolAddressWETHTOS,
+  //   token0,
+  //   token1,
+  //   amount0Desired,
+  //   amount1Desired,
+  //   deployer
+  // );
 
-  // ETH/USDC addLiquidity
-  console.log('====== poolAddressWETHUSDC mint ==========');
-  if (USDCAddress < WETHAddress) {
-    token0 = USDCAddress;
-    amount0Desired = ethers.utils.parseUnits('50', 6);
-    token1 = WETHAddress;
-    amount1Desired = ethers.utils.parseEther('0.028');
-  } else {
-    token0 = WETHAddress;
-    amount0Desired = ethers.utils.parseEther('0.028');
-    token1 = USDCAddress;
-    amount1Desired = ethers.utils.parseUnits('50', 6);
-  }
-  await addLiquidity(
-    NonfungiblePositionManagerContract,
-    poolAddressWETHUSDC,
-    token0,
-    token1,
-    amount0Desired,
-    amount1Desired,
-    deployer
-  );
+  // // ETH/USDC addLiquidity
+  // console.log('====== poolAddressWETHUSDC mint ==========');
+  // if (USDCAddress < WETHAddress) {
+  //   token0 = USDCAddress;
+  //   amount0Desired = ethers.utils.parseUnits('50', 6);
+  //   token1 = WETHAddress;
+  //   amount1Desired = ethers.utils.parseEther('0.028');
+  // } else {
+  //   token0 = WETHAddress;
+  //   amount0Desired = ethers.utils.parseEther('0.028');
+  //   token1 = USDCAddress;
+  //   amount1Desired = ethers.utils.parseUnits('50', 6);
+  // }
+  // await addLiquidity(
+  //   NonfungiblePositionManagerContract,
+  //   poolAddressWETHUSDC,
+  //   token0,
+  //   token1,
+  //   amount0Desired,
+  //   amount1Desired,
+  //   deployer
+  // );
 
-  // ETH/USDT addLiquidity
-  console.log('====== poolAddressWETHUSDT mint ==========');
-  if (USDTAddress < WETHAddress) {
-    token0 = USDTAddress;
-    amount0Desired = ethers.utils.parseUnits('50', 6);
-    token1 = WETHAddress;
-    amount1Desired = ethers.utils.parseEther('0.028');
-  } else {
-    token0 = WETHAddress;
-    amount0Desired = ethers.utils.parseEther('0.028');
-    token1 = USDTAddress;
-    amount1Desired = ethers.utils.parseUnits('50', 6);
-  }
-  await addLiquidity(
-    NonfungiblePositionManagerContract,
-    poolAddressWETHUSDT,
-    token0,
-    token1,
-    amount0Desired,
-    amount1Desired,
-    deployer
-  );
+  // // ETH/USDT addLiquidity
+  // console.log('====== poolAddressWETHUSDT mint ==========');
+  // if (USDTAddress < WETHAddress) {
+  //   token0 = USDTAddress;
+  //   amount0Desired = ethers.utils.parseUnits('50', 6);
+  //   token1 = WETHAddress;
+  //   amount1Desired = ethers.utils.parseEther('0.028');
+  // } else {
+  //   token0 = WETHAddress;
+  //   amount0Desired = ethers.utils.parseEther('0.028');
+  //   token1 = USDTAddress;
+  //   amount1Desired = ethers.utils.parseUnits('50', 6);
+  // }
+  // await addLiquidity(
+  //   NonfungiblePositionManagerContract,
+  //   poolAddressWETHUSDT,
+  //   token0,
+  //   token1,
+  //   amount0Desired,
+  //   amount1Desired,
+  //   deployer
+  // );
 
   console.log('totalGasUsed:', totalGasUsed);
 }
@@ -232,25 +232,25 @@ async function checkBalances(
   deployer
 ) {
   ///=========== ETHContract
-  let balanceETH = await providers.getBalance(deployer.address);
-  console.log('balanceBeforeETH', balanceETH.toString());
-  expect(balanceETH).to.gte(ethers.utils.parseEther('0.112'));
+  // let balanceETH = await providers.getBalance(deployer.address);
+  // console.log('balanceBeforeETH', balanceETH.toString());
+  // expect(balanceETH).to.gte(ethers.utils.parseEther('0.112'));
   ///=========== TONContract
-  let balanceTON = await TONContract.balanceOf(deployer.address);
-  console.log('balanceBeforeTON', balanceTON.toString());
-  expect(balanceTON).to.gte(ethers.utils.parseEther('70'));
-  ///=========== TOSContract
-  let balanceTOS = await TOSContract.balanceOf(deployer.address);
-  console.log('balanceBeforeTOS', balanceTOS.toString());
-  expect(balanceTOS).to.gte(ethers.utils.parseEther('50'));
-  ///=========== USDCContract
-  let balanceUSDC = await USDCContract.balanceOf(deployer.address);
-  console.log('balanceBeforeUSDC', balanceUSDC.toString());
-  expect(balanceUSDC).to.gte(ethers.utils.parseUnits('50', 6));
-  ///=========== USDTContract
-  let balanceUSDT = await USDTContract.balanceOf(deployer.address);
-  console.log('balanceBeforeUSDT', balanceUSDT.toString());
-  expect(balanceUSDT).to.gte(ethers.utils.parseUnits('50', 6));
+  // let balanceTON = await TONContract.balanceOf(deployer.address);
+  // console.log('balanceBeforeTON', balanceTON.toString());
+  // expect(balanceTON).to.gte(ethers.utils.parseEther('70'));
+  // ///=========== TOSContract
+  // let balanceTOS = await TOSContract.balanceOf(deployer.address);
+  // console.log('balanceBeforeTOS', balanceTOS.toString());
+  // expect(balanceTOS).to.gte(ethers.utils.parseEther('50'));
+  // ///=========== USDCContract
+  // let balanceUSDC = await USDCContract.balanceOf(deployer.address);
+  // console.log('balanceBeforeUSDC', balanceUSDC.toString());
+  // expect(balanceUSDC).to.gte(ethers.utils.parseUnits('50', 6));
+  // ///=========== USDTContract
+  // let balanceUSDT = await USDTContract.balanceOf(deployer.address);
+  // console.log('balanceBeforeUSDT', balanceUSDT.toString());
+  // expect(balanceUSDT).to.gte(ethers.utils.parseUnits('50', 6));
 }
 
 /**

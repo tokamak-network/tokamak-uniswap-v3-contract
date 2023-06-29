@@ -20,9 +20,9 @@ QuoterV2 deployed to 0xD073E3ad1B4603cF6B5AA9aFc11B31529A2D213D
 TickLens deployed to 0xCf1AADc5E8e7e8bC52204f06F1414FBA99e6f932
 UniswapInterfaceMulticall deployed to 0x4D2cfb9300f58225057c9c139B459c2B64bA5681
 */
-const QuoteAddress = "0xAC49B1F2Bf9AaC284609abF5eb1b90f352b18a77";
-const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
-const TOS = "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
+const QuoteAddress = "0xE3a8EbF3f0bC0f752C44737533E4a5273b201dE4";
+const TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa"
+const TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC"
 const Fee = ethers.BigNumber.from("3000")
 const QuoterArtifact = require("../abis/Quoter.json");
 

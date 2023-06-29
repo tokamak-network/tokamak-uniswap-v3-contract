@@ -34,21 +34,21 @@ async function main() {
   const USDTAddress = USDTContract.address;
 
   const Quoter = await getContract('Quoter');
-  let quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
-    TONAddress,
-    TOSAddress,
-    3000,
-    ethers.utils.parseEther('1'),
-    0
-  );
-  console.log(
-    `1 TON => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} TOS`
-  );
+  // let quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+  //   TONAddress,
+  //   TOSAddress,
+  //   3000,
+  //   ethers.utils.parseEther('1'),
+  //   0
+  // );
+  // console.log(
+  //   `1 TON => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} TOS`
+  // );
   quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
     TOSAddress,
     TONAddress,
     3000,
-    ethers.utils.parseEther('1'),
+    ethers.utils.parseEther('100'),
     0
   );
   console.log(
@@ -65,6 +65,16 @@ async function main() {
     `1 TON => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} ETH`
   );
   quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+    WETHAddress,
+    TONAddress,
+    3000,
+    ethers.utils.parseEther('0.000804204211611148'),
+    0
+  );
+  console.log(
+    `0.000804204211611148 ETH => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} TON`
+  );
+  quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
     TOSAddress,
     WETHAddress,
     3000,
@@ -73,6 +83,16 @@ async function main() {
   );
   console.log(
     `1 TOS => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} ETH`
+  );
+  quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+    WETHAddress,
+    TOSAddress,
+    3000,
+    ethers.utils.parseEther('0.001083322483507678'),
+    0
+  );
+  console.log(
+    `0.001083322483507678 ETH => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} TOS`
   );
   quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
     USDCAddress,
@@ -85,6 +105,16 @@ async function main() {
     `1 USDC => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} ETH`
   );
   quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+    WETHAddress,
+    USDCAddress,
+    3000,
+    ethers.utils.parseUnits('0.000535502894904843', 18),
+    0
+  );
+  console.log(
+    `0.000535502894904843 ETH => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 6)} USDC`
+  );
+  quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
     USDTAddress,
     WETHAddress,
     3000,
@@ -93,6 +123,16 @@ async function main() {
   );
   console.log(
     `1 USDT => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 18)} ETH`
+  );
+  quotedAmountOut1 = await Quoter.callStatic.quoteExactInputSingle(
+    WETHAddress,
+    USDTAddress,
+    3000,
+    ethers.utils.parseUnits('0.000535577420106933', 18),
+    0
+  );
+  console.log(
+    `0.000535577420106933 ETH => ${ethers.utils.formatUnits(quotedAmountOut1.toString(), 6)} USDT`
   );
 }
 

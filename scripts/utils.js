@@ -19,6 +19,8 @@ const encodePath = (path, fees) => {
   for (let i = 0; i < fees.length; i++) {
     encoded += path[i].slice(2);
     encoded += fees[i].toString(16).padStart(2 * FEE_SIZE, "0");
+    console.log(fees[i].toString(16));
+    console.log(fees[i].toString(16).padStart(2 * FEE_SIZE, "0"));
   }
   encoded += path[path.length - 1].slice(2);
   return encoded.toLowerCase();

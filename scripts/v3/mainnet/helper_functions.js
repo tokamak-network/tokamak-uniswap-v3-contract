@@ -149,7 +149,7 @@ const getPoolContractAddress = async (
   );
   let poolCode = await providers.getCode(poolAddress);
   if (poolCode === '0x') {
-    console.log('poolAddress is null, so you should deploy');
+    console.log(`poolAddress is ${poolAddress}, so you should deploy`);
   }
   return poolAddress;
 };

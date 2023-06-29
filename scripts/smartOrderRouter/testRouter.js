@@ -6,13 +6,13 @@ const JSBI  = require('jsbi') // jsbi@3.2.5
 const V3_SWAP_ROUTER02 = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
 
 require('dotenv').config()
-const WALLET_ADDRESS = process.env.WALLET_ADDRESS
-const WALLET_SECRET = process.env.WALLET_SECRET
-const INFURA_TEST_URL = process.env.INFURA_TEST_URL
+const WALLET_ADDRESS = '0xB68AA9E398c054da7EBAaA446292f611CA0CD52B'
+const WALLET_SECRET = process.env.PRIVATE_KEY1
+const INFURA_TEST_URL = `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
 
-const web3Provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL) // Ropsten
+const web3Provider = new ethers.providers.JsonRpcProvider(INFURA_TEST_URL)
 
-const chainId = 3
+const chainId = 5
 const router = new AlphaRouter({ chainId: chainId, provider: web3Provider})
 
 const name0 = 'Tokamak Network Ton'
@@ -29,20 +29,22 @@ const TON = new Token(chainId, address0, decimals0, symbol0, name0)
 const TOS = new Token(chainId, address1, decimals1, symbol1, name1)
 
 const wei = ethers.utils.parseUnits('0.01', 18)
-const inputAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei))
+const inputAmount = CurrencyAmount.fromRawAmount(TON, JSBI.BigInt(wei))
 
 async function main() {
+    console.log("what");
   const route = await router.route(
     inputAmount,
-    UNI,
+    TOS,
     TradeType.EXACT_INPUT,
     {
+      type : 1, //SwapRouter02
       recipient: WALLET_ADDRESS,
-      slippageTolerance: new Percent(25, 100),
-      deadline: Math.floor(Date.now()/1000 + 1800)
+      slippageTolerance: new Percent(50, 100),
+      deadline: Date.now() + 180000,
     }
   )
-
+  console.log(route.route);
   console.log(`Quote Exact In: ${route.quote.toFixed(10)}`)
 
   const transaction = {
@@ -57,15 +59,15 @@ async function main() {
   const wallet = new ethers.Wallet(WALLET_SECRET)
   const connectedWallet = wallet.connect(web3Provider)
 
-  const approvalAmount = ethers.utils.parseUnits('1', 18).toString()
+  const approvalAmount = ethers.utils.parseUnits('100', 18).toString()
   const ERC20ABI = require('./abi.json')
   const contract0 = new ethers.Contract(address0, ERC20ABI, web3Provider)
-  await contract0.connect(connectedWallet).approve(
-    V3_SWAP_ROUTER02,
-    approvalAmount
-  )
+//   await contract0.connect(connectedWallet).approve(
+//     V3_SWAP_ROUTER02,
+//     approvalAmount
+//   )
 
-  const tradeTransaction = await connectedWallet.sendTransaction(transaction)
+  //const tradeTransaction = await connectedWallet.sendTransaction(transaction)
 }
 
 main().catch((error) => {
