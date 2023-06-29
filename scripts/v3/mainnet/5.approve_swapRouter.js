@@ -29,11 +29,23 @@ async function main() {
   SwapRouterContract.address;
   ///=============== TONContract
   const TONContract = (await getContract('TON')).connect(deployer);
+    ///=============== TONContract
+    const TOSContract = (await getContract('TOS')).connect(deployer);
  
   totalGasUsed = totalGasUsed.add(
     await allowFunction(
       'TON',
       TONContract,
+      deployer.address,
+      SwapRouterAddress
+    )
+  );
+  console.log(TONContract.address);
+  console.log(TOSContract.address);
+  totalGasUsed = totalGasUsed.add(
+    await allowFunction(
+      'TOS',
+      TOSContract,
       deployer.address,
       SwapRouterAddress
     )

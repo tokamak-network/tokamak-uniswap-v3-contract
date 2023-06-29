@@ -24,11 +24,12 @@ async function main() {
   const TOSContract = await getContract('TOS');
   const TOSAddress = TOSContract.address;
   ///=============== SwapRouterContract  
-  const SwapRouterContract = await getContract('SwapRouter');
+  const SwapRouterContract = await getContract('SwapRouter02');
   const SwapRouterAddress = SwapRouterContract.address;
 
   let poolAddressTOSTON = await getPoolContractAddress(UniswapV3FactoryContract, TONAddress, TOSAddress, 3000);
   let poolAddressWETHTON = await getPoolContractAddress(UniswapV3FactoryContract, WETHAddress, TONAddress, 3000);
+  console.log("SwapRouterAddress",SwapRouterAddress);
   
   // address tokenIn;
   // address tokenOut;
@@ -42,14 +43,14 @@ async function main() {
   let deadline = Date.now() + 100000;
 
   let amountIn = ethers.utils.parseEther('1');
-  //==============TON => TOS (ERC20->ERC20)
+  //==============TOS => TOS (ERC20->ERC20)
   let SwapParams = 
     {
       tokenIn: TOSAddress,
       tokenOut: TONAddress,
       fee: 3000,
       recipient: deployer.address,
-      deadline: deadline,
+      //deadline: deadline,
       amountIn: amountIn,
       amountOutMinimum: 0,
       sqrtPriceLimitX96: 0,
@@ -61,7 +62,7 @@ async function main() {
       });
       await tx.wait();
       const receipt = await providers.getTransactionReceipt(tx.hash);
-      console.log("===TON => TOS (ERC20->ERC20)");
+      console.log("===TOS => TON (ERC20->ERC20)");
       console.log("transactionHash:", receipt.transactionHash);
       console.log("gasUsed: ",receipt.gasUsed);
       console.log();
