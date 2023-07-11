@@ -262,6 +262,7 @@ async function checkBalances(
     ethers.utils.parseUnits('5000', 6)
   );
  */
+
 function getLiquidityForAmount1(sqrtRatioAX96, sqrtRatioBX96, amount1) {
   if (sqrtRatioAX96 > sqrtRatioBX96) {
     let temp;
@@ -273,7 +274,21 @@ function getLiquidityForAmount1(sqrtRatioAX96, sqrtRatioBX96, amount1) {
   return amount1
     .mul(FixedPoint96Q96)
     .div(sqrtRatioBX96.sub(sqrtRatioAX96))
-    .toString();
+    //.toString();
+}
+function getLiquidityForAmount0(sqrtRatioAX96, sqrtRatioBX96, amount0) {
+  if (sqrtRatioAX96 > sqrtRatioBX96) {
+    let temp;
+    temp = sqrtRatioAX96;
+    sqrtRatioAX96 = sqrtRatioBX96;
+    sqrtRatioBX96 = temp;
+  }
+  let FixedPoint96Q96 = ethers.BigNumber.from('0x1000000000000000000000000');
+  let intermediate = sqrtRatioAX96.mul(sqrtRatioBX96).div(FixedPoint96Q96);
+  return amount0
+    .mul(intermediate)
+    .div(sqrtRatioBX96.sub(sqrtRatioAX96))
+    //.toString();
 }
 
 async function getNextTick() {}
@@ -303,6 +318,7 @@ async function addLiquidity(
     ethers.BigNumber.from(getSqrtRatioAtTick(tickCurrent - 1).toString()),
     amount1Desired
   );
+
   const add = false;
   const nextSqrtPrice = getNextSqrtPriceFromAmount0RoundingUp(
     JSBI.BigInt(sqrtPriceX96),
