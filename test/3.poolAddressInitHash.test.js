@@ -3,8 +3,9 @@ const { expect, assert } = chai;
 const { ethers } = require("hardhat");
 const {creationCode } = require('./constant/uniswapV3PoolCreationCode');
 const sdk = require("@uniswap/v3-sdk");
-const { default: JSBI } = require("jsbi");
+const JSBI = require('jsbi'); // jsbi@3.2.5
 const getSqrtRatioAtTick = sdk.TickMath.getSqrtRatioAtTick;
+const getTickAtSqrtRatio = sdk.TickMath.getTickAtSqrtRatio;
 const nearestUsableTick = sdk.nearestUsableTick;
 const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
@@ -106,7 +107,17 @@ describe("check if poolAddress hash is wrong", async function () {
         console.log(ethers.BigNumber.from("0x1000000000000000000000000"));
 
         console.log("wow",await sqrtPriceMathcontract.getAmount0Delta(getSqrtRatioAtTick(204600).toString(),getSqrtRatioAtTick(201207).toString(), 9453, true));
-
+        console.log(JSBI.BigInt("2505411999795360582221170761428213"));
+        console.log(getTickAtSqrtRatio(JSBI.BigInt("2505411999795360582221170761428213")));
+        console.log(getTickAtSqrtRatio(JSBI.BigInt("250541448375047931186413801569")));
+        console.log(getTickAtSqrtRatio(JSBI.BigInt("79228162514264337593543950336")));
+        const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+        const now = new Date(1690260364 * 1000 + KR_TIME_DIFF)
+        console.log(now)
+        console.log(now.toJSON())
+        console.log(now.toString())
+        console.log(1690260364 * 1000 + KR_TIME_DIFF);
+        console.log(new Date(2370616672));
     })
 })
 
