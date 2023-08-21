@@ -1,10 +1,12 @@
 const ethers = require('ethers');
 require('dotenv').config();
-const hre = require('hardhat');
 const {getContract, getPoolContractAddress, deployContract} = require("./helper_functions.js");
 const UniswapV3PoolArtifact = require('../abis/UniswapV3Pool.sol/UniswapV3Pool.json');
 const { expect } = require("chai");
 const {encodePath } = require("../../utils");
+const JSBI = require('jsbi'); // jsbi@3.2.5
+const {Percent, CurrencyAmount} = require("@uniswap/sdk-core");
+const {amountOutMinimum} = require("@uniswap/v3-sdk");
 const autoRouterResponse = {
     "methodParameters": {
         "calldata": "0x5ae401dc0000000000000000000000000000000000000000000000000000000064e2d798000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000000e404e45aaf000000000000000000000000fa956eb0c4b3e692ad5a6b2f08170ade55999aca00000000000000000000000042000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000bb8000000000000000000000000b68aa9e398c054da7ebaaa446292f611ca0cd52b0000000000000000000000000000000000000000000000005a34a38fc00a0000000000000000000000000000000000000000000000000000001a19ac913a7e500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000124b858183f00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000080000000000000000000000000b68aa9e398c054da7ebaaa446292f611ca0cd52b00000000000000000000000000000000000000000000000030927f74c9de0000000000000000000000000000000000000000000000000000000e0d202e2051c30000000000000000000000000000000000000000000000000000000000000042fa956eb0c4b3e692ad5a6b2f08170ade55999aca000bb86af3cb766d6cd37449bfd321d961a61b0515c1bc000bb8420000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
@@ -46,8 +48,8 @@ const autoRouterResponse = {
                 "liquidity": "295267124098294018374",
                 "sqrtRatioX96": "2346374796660857608643827361817",
                 "tickCurrent": "67769",
-                "amountIn": "6500000000000000000",
-                "amountOut": "7383311247856493"
+                "amountIn": "6500000000000000000000000000333000000",
+                "amountOut": "1200000000000000000000"
             }
         ],
         [
@@ -70,7 +72,7 @@ const autoRouterResponse = {
                 "liquidity": "10713212008910829133217",
                 "sqrtRatioX96": "90779878032094045020783025270",
                 "tickCurrent": "2722",
-                "amountIn": "3500000000000000000"
+                "amountIn": "350000000000000000000000000000"
             },
             {
                 "type": "v3-pool",
@@ -91,7 +93,7 @@ const autoRouterResponse = {
                 "liquidity": "365715536577234461815",
                 "sqrtRatioX96": "2045103781648881248953277180048",
                 "tickCurrent": "65020",
-                "amountOut": "3974856945623432"
+                "amountOut": "39748569456234320000000000000000000"
             }
         ]
     ],
@@ -140,12 +142,13 @@ async function main() {
   let swapData = [];
   let route = autoRouterResponse.route;
   let swapRouterAddress = autoRouterResponse.methodParameters.to;
-
+  let slippage = 0.005;
   for(let i = 0; i< route.length; i ++){
     routePath = route[i];
     //amountIns[i] = routePath[0]["amountIn"];
     //let amountIn = amountIns[i];
-    let amountIn = routePath[0]["amountIn"];
+    let amountIn = ethers.BigNumber.from(routePath[0]["amountIn"]);
+    console.log(amountIn);
     paths[i] = [routePath[0]["tokenIn"]['address'], routePath[0]["tokenOut"]["address"]]
     fees[i] = [parseInt(routePath[0]["fee"])]
     if(routePath.length > 1){
@@ -153,7 +156,10 @@ async function main() {
             paths[i].push(routePath[j]["tokenOut"]["address"])
             fees[i].push(parseInt(routePath[j]["fee"]))
         }
-        let amountOutMinimum = Math.floor(routePath[routePath.length-1]["amountOut"] * 0.995);
+        console.log(BigInt(Math.floor(routePath[routePath.length-1]["amountOut"] / (1 + slippage))).toString());
+        let amountOutMinimum = ethers.BigNumber.from(BigInt(Math.floor(routePath[routePath.length-1]["amountOut"] / (1 + slippage))).toString());
+        //let amountOutMinimum = ethers.BigNumber.from(Math.floor(routePath[routePath.length-1]["amountOut"]));
+        
         let path = encodePath(paths[i], fees[i]);
         const params = {
             recipient: swapRouterAddress,
@@ -165,7 +171,8 @@ async function main() {
         console.log(params);
         swapData.push(SwapRouterContract.interface.encodeFunctionData('exactInput', [params]));
     } else{
-        let amountOutMinimum = Math.floor(routePath[0]["amountOut"] * 0.995);
+        console.log(Math.floor(routePath[0]["amountOut"] / (1 + slippage)).toString());
+        let amountOutMinimum = ethers.BigNumber.from(BigInt(Math.floor(routePath[0]["amountOut"] / (1 + slippage))).toString());
         let SwapParams = 
             {
                 tokenIn: routePath[0]["tokenIn"]['address'],
@@ -200,23 +207,23 @@ const encData2 = SwapRouterContract.interface.encodeFunctionData('unwrapWETH9(ui
 swapData.push(encData2);
 const encMultiCall = SwapRouterContract.interface.encodeFunctionData('multicall(uint256,bytes[])', [deadline, swapData])
 console.log(encMultiCall);
-try {
-  // const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-  //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-  const txArgs = {
-      to: swapRouterAddress,
-      from: deployer.address,
-      data: encMultiCall,
-      gasLimit: 600000,
-  }
-    //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-    const tx = await deployer.sendTransaction(txArgs)
-    await tx.wait();
-    const receipt = await providers.getTransactionReceipt(tx.hash);
-    console.log(receipt);
-  } catch (e) {
-    console.log(e.message);
-  }
+// try {
+//   // const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+//   //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+//   const txArgs = {
+//       to: swapRouterAddress,
+//       from: deployer.address,
+//       data: encMultiCall,
+//       gasLimit: 600000,
+//   }
+//     //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+//     const tx = await deployer.sendTransaction(txArgs)
+//     await tx.wait();
+//     const receipt = await providers.getTransactionReceipt(tx.hash);
+//     console.log(receipt);
+//   } catch (e) {
+//     console.log(e.message);
+//   }
 
 //   //==============TOS => TON (ERC20->ERC20)
 //   let SwapParams = 
