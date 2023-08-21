@@ -136,15 +136,16 @@ async function main() {
   let routePath;
   let paths = [];
   let fees = [];
-  let amountIns = [];
+  //let amountIns = [];
   let swapData = [];
   let route = autoRouterResponse.route;
   let swapRouterAddress = autoRouterResponse.methodParameters.to;
 
   for(let i = 0; i< route.length; i ++){
     routePath = route[i];
-    amountIns[i] = routePath[0]["amountIn"];
-    let amountIn = amountIns[i];
+    //amountIns[i] = routePath[0]["amountIn"];
+    //let amountIn = amountIns[i];
+    let amountIn = routePath[0]["amountIn"];
     paths[i] = [routePath[0]["tokenIn"]['address'], routePath[0]["tokenOut"]["address"]]
     fees[i] = [parseInt(routePath[0]["fee"])]
     if(routePath.length > 1){
