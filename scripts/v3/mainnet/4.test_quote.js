@@ -68,7 +68,7 @@ async function main() {
     WETHAddress,
     TONAddress,
     3000,
-    ethers.utils.parseEther('0.000804204211611148'),
+    ethers.utils.parseEther('10000.000804204211611148'),
     0
   );
   console.log(

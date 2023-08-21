@@ -45,9 +45,10 @@ async function main() {
     deployer
   );
   let UniswapV3PoolContract = UniswapV3Pool_.attach(
-    '0x124C9eE4fe1f7eC5aDBFC9d475ae2a52eBC50365'
+    '0x2c1c509942d4f55e2bfd2b670e52b7a16ec5e5c4'
   );
-  let positionInfo = await NonfungiblePositionManagerContract.positions(1);
+  let tokenId = 10;
+  let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   let liquidity = JSBI.BigInt(positionInfo.liquidity.toString());
   const tickLower = positionInfo.tickLower;
   const tickUpper = positionInfo.tickUpper;
@@ -75,14 +76,14 @@ async function main() {
   let deadline = Math.floor(Date.now() / 1000) + 100000;
   let results =
     await NonfungiblePositionManagerContract.callStatic.decreaseLiquidity({
-      tokenId: 1,
+      tokenId: tokenId,
       liquidity: positionInfo.liquidity,
       deadline: deadline,
       amount0Min: 0,
       amount1Min: 0,
     });
   let results2 = await NonfungiblePositionManagerContract.callStatic.collect({
-    tokenId: 1,
+    tokenId: tokenId,
     recipient: deployer.address,
     amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
     amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
@@ -91,35 +92,35 @@ async function main() {
   console.log(results2.amount1);
   console.log(results.amount0.add(results2.amount0)); // amount0 + fee = 44071833809710618407
   console.log(results.amount1.add(results2.amount1)); // amount1 + fee = 18546165554919205637
-  if (chainName === 'localhost') {
-    ///=========== TONContract
-    let balanceBeforeTON = await TONContract.balanceOf(deployer.address);
-    console.log('balanceBeforeTON', balanceBeforeTON.toString());
-    let balanceBeforeTOS = await TOSContract.balanceOf(deployer.address);
-    console.log('balanceBeforeTOS', balanceBeforeTOS.toString());
-    let tx = await NonfungiblePositionManagerContract.decreaseLiquidity({
-      tokenId: 1,
-      liquidity: positionInfo.liquidity,
-      deadline: deadline,
-      amount0Min: 0,
-      amount1Min: 0,
-    });
-    await tx.wait();
-    tx = await NonfungiblePositionManagerContract.collect({
-      tokenId: 1,
-      recipient: deployer.address,
-      amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
-      amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
-    });
-    await tx.wait();
-    ///=========== TONContract
-    let balanceAfterTON = await TONContract.balanceOf(deployer.address);
-    console.log('balanceAfterTON', balanceAfterTON.toString());
-    let balanceAfterTOS = await TOSContract.balanceOf(deployer.address);
-    console.log('balanceAfterTOS', balanceAfterTOS.toString());
-    console.log('amount0 + fee', balanceAfterTON.sub(balanceBeforeTON));
-    console.log('amount1 + fee', balanceAfterTOS.sub(balanceBeforeTOS));
-  }
+  // if (chainName === 'localhost') {
+  //   ///=========== TONContract
+  //   let balanceBeforeTON = await TONContract.balanceOf(deployer.address);
+  //   console.log('balanceBeforeTON', balanceBeforeTON.toString());
+  //   let balanceBeforeTOS = await TOSContract.balanceOf(deployer.address);
+  //   console.log('balanceBeforeTOS', balanceBeforeTOS.toString());
+  //   let tx = await NonfungiblePositionManagerContract.decreaseLiquidity({
+  //     tokenId: 1,
+  //     liquidity: positionInfo.liquidity,
+  //     deadline: deadline,
+  //     amount0Min: 0,
+  //     amount1Min: 0,
+  //   });
+  //   await tx.wait();
+  //   tx = await NonfungiblePositionManagerContract.collect({
+  //     tokenId: 1,
+  //     recipient: deployer.address,
+  //     amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
+  //     amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
+  //   });
+  //   await tx.wait();
+  //   ///=========== TONContract
+  //   let balanceAfterTON = await TONContract.balanceOf(deployer.address);
+  //   console.log('balanceAfterTON', balanceAfterTON.toString());
+  //   let balanceAfterTOS = await TOSContract.balanceOf(deployer.address);
+  //   console.log('balanceAfterTOS', balanceAfterTOS.toString());
+  //   console.log('amount0 + fee', balanceAfterTON.sub(balanceBeforeTON));
+  //   console.log('amount1 + fee', balanceAfterTOS.sub(balanceBeforeTOS));
+  // }
 }
 
 main().catch((error) => {

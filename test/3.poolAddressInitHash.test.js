@@ -118,6 +118,7 @@ describe("check if poolAddress hash is wrong", async function () {
         console.log(now.toString())
         console.log(1690260364 * 1000 + KR_TIME_DIFF);
         console.log(new Date(2370616672));
+        console.log(getTickAtSqrtRatio(JSBI.BigInt("250541448375047931186413801569")));
     })
 })
 
