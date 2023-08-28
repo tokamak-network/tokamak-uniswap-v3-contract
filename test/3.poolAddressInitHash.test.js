@@ -9,7 +9,17 @@ const getTickAtSqrtRatio = sdk.TickMath.getTickAtSqrtRatio;
 const nearestUsableTick = sdk.nearestUsableTick;
 const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
+const { Pool } = require("@uniswap/v3-sdk")
+const { Percent, BigintIsh } = require("@uniswap/sdk-core");
 
+function toHex(bigintIsh) {
+    const bigInt = JSBI.BigInt(bigintIsh)
+    let hex = bigInt.toString(16)
+    if (hex.length % 2 !== 0) {
+      hex = `0${hex}`
+    }
+    return `0x${hex}`
+  }
 describe("check if poolAddress hash is wrong", async function () {
     it("compare", async() => {
         const encodePacked = ethers.utils.solidityPack(["bytes"],[creationCode]);
@@ -119,6 +129,16 @@ describe("check if poolAddress hash is wrong", async function () {
         console.log(1690260364 * 1000 + KR_TIME_DIFF);
         console.log(new Date(2370616672));
         console.log(getTickAtSqrtRatio(JSBI.BigInt("250541448375047931186413801569")));
+        console.log(getAmount1Delta(
+            getSqrtRatioAtTick(-60),
+            getSqrtRatioAtTick(0),
+            JSBI.BigInt("1000000"),
+            true
+        ).toString());
+        console.log(JSBI.BigInt(33329220265679295795561).toString())
+        const oneHundred = new Percent(100,100);
+        console.log(oneHundred.multiply(JSBI.BigInt("33329220265679295795561")).quotient.toString());
+        console.log(oneHundred.multiply(33329220265679295795561).quotient.toString());
     })
 })
 
