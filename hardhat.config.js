@@ -52,7 +52,7 @@ module.exports = {
     },
     tokamakgoerli: {
       chainId: 5050,
-      url: `https://goerli.optimism.tokamak.network`,
+      url: `https://rpc.titan-goerli.tokamak.network`,
       timeout: 200000,
       accounts: [`${process.env.PRIVATE_KEY1}`],
     },
