@@ -13,7 +13,7 @@ const SUBGRAPH_URL =
   'https://thegraph.titan-goerli.tokamak.network/subgraphs/name/tokamak/titan-uniswap-subgraph';
   POSITIONS_QUERY = `
   query MyQuery {
-    positions(where: {owner: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B"}) {
+    positions(where: {id: "22"}) {
       id
       feeGrowthInside0LastX128
       feeGrowthInside1LastX128

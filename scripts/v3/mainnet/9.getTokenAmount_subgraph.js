@@ -26,7 +26,7 @@ const SUBGRAPH_URL =
   'https://thegraph.titan-goerli.tokamak.network/subgraphs/name/tokamak/titan-uniswap-subgraph';
   POSITIONS_QUERY = `
   query MyQuery {
-    positions(where: {owner: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B"}) {
+    positions(where: {id: "22"}) {
       id
       feeGrowthInside0LastX128
       feeGrowthInside1LastX128
@@ -60,6 +60,7 @@ async function main() {
   const chainName = hre.network.name;
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
+  deployer = await hre.ethers.getSigner("0x8c595da827f4182bc0e3917bcca8e654df8223e1");
   providers = hre.ethers.provider;
   ///=========== UniswapV3Factory
   const UniswapV3FactoryContract = await getContract('UniswapV3Factory');
@@ -81,7 +82,8 @@ async function main() {
   let UniswapV3PoolContract = UniswapV3Pool_.attach(
     '0x2c1c509942d4f55e2bfd2b670e52b7a16ec5e5c4'
   );
-  let tokenId = 10;
+  let amount0 = amount1 = 0;
+  let tokenId = 22;
   let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   let liquidity = JSBI.BigInt(positionInfo.liquidity.toString());
   const tickLower = positionInfo.tickLower;
@@ -91,22 +93,17 @@ async function main() {
   const sqrtPriceX96 = JSBI.BigInt(
     (await UniswapV3PoolContract.slot0()).sqrtPriceX96.toString()
   );
-  console.log(
-    getAmount0Delta(
-      sqrtPriceX96,
-      uppersqrtPriceX96,
-      liquidity,
-      false
-    ).toString()
-  );
-  console.log(
-    getAmount1Delta(
-      lowersqrtPriceX96,
-      sqrtPriceX96,
-      liquidity,
-      false
-    ).toString()
-  );
+  const slot0Tick = (await UniswapV3PoolContract.slot0()).tick;
+  if(slot0Tick < tickLower) {
+    amount0 = getAmount0Delta(lowersqrtPriceX96,uppersqrtPriceX96, liquidity, false).toString()
+  } else if (slot0Tick < tickUpper) {
+    amount0 = getAmount0Delta(sqrtPriceX96, uppersqrtPriceX96, liquidity, false).toString()
+    amount1 = getAmount1Delta(lowersqrtPriceX96, sqrtPriceX96, liquidity, false).toString()
+  } else {
+    console.log(ethers.BigNumber.from(positionInfo.liquidity.toString()));
+    amount1 = getAmount1Delta(lowersqrtPriceX96, uppersqrtPriceX96,  JSBI.BigInt(2004784), false).toString()
+  }
+  console.log(amount0, amount1);
   let deadline = Math.floor(Date.now() / 1000) + 100000;
   let results =
     await NonfungiblePositionManagerContract.callStatic.decreaseLiquidity({
@@ -121,7 +118,7 @@ async function main() {
     recipient: deployer.address,
     amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
     amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
-  });
+  },{gasLimit:300000});
   console.log(results2.amount0);
   console.log(results2.amount1);
   console.log(results.amount0.add(results2.amount0)); // amount0 + fee = 44071833809710618407
@@ -131,22 +128,28 @@ async function main() {
 
   const result = await axios.post(SUBGRAPH_URL, { query: POSITIONS_QUERY });
   const position10 = result.data.data.positions[0];
+
   const slot0TickSub = parseInt(position10.pool.tick);
   const tickLowerSub = parseInt(position10.tickLower.tickIdx);
   const tickUpperSub = parseInt(position10.tickUpper.tickIdx);
   const sqrtPriceSub = JSBI.BigInt(position10.pool.sqrtPrice);
-  const uppersqrtPriceSub = getSqrtRatioAtTick(tickUpper);
-  const lowersqrtPriceSub = getSqrtRatioAtTick(tickLower);
+  const uppersqrtPriceSub = getSqrtRatioAtTick(tickUpperSub);
+  const lowersqrtPriceSub = getSqrtRatioAtTick(tickLowerSub);
   const liquiditySub = JSBI.BigInt(position10.liquidity);
+  
+  
   if(slot0TickSub < tickLowerSub) {
     amount0 = getAmount0Delta( lowersqrtPriceSub,uppersqrtPriceSub, liquiditySub, false).toString()
   } else if (slot0TickSub < tickUpper) {
     amount0 = getAmount0Delta(sqrtPriceSub, uppersqrtPriceSub, liquiditySub, false).toString()
     amount1 = getAmount1Delta(lowersqrtPriceSub, sqrtPriceSub, liquiditySub, false).toString()
   } else {
+    console.log(lowersqrtPriceSub.toString(), uppersqrtPriceSub.toString(), liquiditySub.toString());
     amount1 = getAmount1Delta(lowersqrtPriceSub, uppersqrtPriceSub, liquiditySub, false).toString()
   }
   console.log(amount0, amount1);
+  console.log(position10, slot0TickSub);
+  
 }
 
 main().catch((error) => {
