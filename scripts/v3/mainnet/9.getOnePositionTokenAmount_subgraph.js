@@ -23,10 +23,10 @@ const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
 const axios = require('axios');
 const SUBGRAPH_URL =
-  'https://thegraph.titan-goerli.tokamak.network/subgraphs/name/tokamak/titan-uniswap-subgraph';
+  'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-gorli';
   POSITIONS_QUERY = `
   query MyQuery {
-    positions(where: {id: "22"}) {
+    positions(where: {id: "73467"}) {
       id
       feeGrowthInside0LastX128
       feeGrowthInside1LastX128
@@ -80,10 +80,10 @@ async function main() {
     deployer
   );
   let UniswapV3PoolContract = UniswapV3Pool_.attach(
-    '0x2c1c509942d4f55e2bfd2b670e52b7a16ec5e5c4'
+    '0x544973170869b2ac245dA27A22BF5A104199942c'
   );
   let amount0 = amount1 = 0;
-  let tokenId = 22;
+  let tokenId = 73467;
   let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   let liquidity = JSBI.BigInt(positionInfo.liquidity.toString());
   const tickLower = positionInfo.tickLower;
@@ -140,7 +140,7 @@ async function main() {
   
   if(slot0TickSub < tickLowerSub) {
     amount0 = getAmount0Delta( lowersqrtPriceSub,uppersqrtPriceSub, liquiditySub, false).toString()
-  } else if (slot0TickSub < tickUpper) {
+  } else if (slot0TickSub < tickUpperSub) {
     amount0 = getAmount0Delta(sqrtPriceSub, uppersqrtPriceSub, liquiditySub, false).toString()
     amount1 = getAmount1Delta(lowersqrtPriceSub, sqrtPriceSub, liquiditySub, false).toString()
   } else {

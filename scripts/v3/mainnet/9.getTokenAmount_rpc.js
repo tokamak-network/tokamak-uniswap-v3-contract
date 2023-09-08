@@ -22,19 +22,24 @@ const getNextSqrtPriceFromAmount1RoundingDown =
 const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
 
+//0x8c595DA827F4182bC0E3917BccA8e654DF8223E1
 async function main() {
   const chainName = hre.network.name;
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
   providers = hre.ethers.provider;
+  if (chainName === 'localhost')
+    deployer = await hre.ethers.getImpersonatedSigner(
+      '0x8c595DA827F4182bC0E3917BccA8e654DF8223E1'
+    );
   ///=========== UniswapV3Factory
   const UniswapV3FactoryContract = await getContract('UniswapV3Factory');
-  ///=============== TOSContract
-  const TOSContract = await getContract('TOS');
-  const TOSAddress = TOSContract.address;
-  ///=============== USDCContract
-  const TONContract = await getContract('TON');
-  const TONAddress = TONContract.address;
+  // ///=============== TOSContract
+  // const TOSContract = await getContract('TOS');
+  // const TOSAddress = TOSContract.address;
+  // ///=============== USDCContract
+  // const TONContract = await getContract('TON');
+  // const TONAddress = TONContract.address;
   ///=============== NonfungiblePositionManagerContract
   const NonfungiblePositionManagerContract = (
     await getContract('NonfungiblePositionManager')
@@ -45,9 +50,9 @@ async function main() {
     deployer
   );
   let UniswapV3PoolContract = UniswapV3Pool_.attach(
-    '0x2c1c509942d4f55e2bfd2b670e52b7a16ec5e5c4'
+    '0x9EF32Ae2acAF105557DB0E98E68c6CD4f1A1aE63'
   );
-  let tokenId = 10;
+  let tokenId = 77558;
   let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   let liquidity = JSBI.BigInt(positionInfo.liquidity.toString());
   const tickLower = positionInfo.tickLower;
@@ -57,22 +62,23 @@ async function main() {
   const sqrtPriceX96 = JSBI.BigInt(
     (await UniswapV3PoolContract.slot0()).sqrtPriceX96.toString()
   );
+  console.log(lowersqrtPriceX96.toString(), sqrtPriceX96.toString(),uppersqrtPriceX96.toString() );
   console.log(
     getAmount0Delta(
-      sqrtPriceX96,
+      lowersqrtPriceX96,
       uppersqrtPriceX96,
       liquidity,
       false
     ).toString()
   );
-  console.log(
-    getAmount1Delta(
-      lowersqrtPriceX96,
-      sqrtPriceX96,
-      liquidity,
-      false
-    ).toString()
-  );
+  // console.log(
+  //   getAmount1Delta(
+  //     lowersqrtPriceX96,
+  //     sqrtPriceX96,
+  //     liquidity,
+  //     false
+  //   ).toString()
+  // );
   let deadline = Math.floor(Date.now() / 1000) + 100000;
   let results =
     await NonfungiblePositionManagerContract.callStatic.decreaseLiquidity({
@@ -88,6 +94,8 @@ async function main() {
     amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
     amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
   });
+  console.log(results.amount0);
+  console.log(results.amount1);
   console.log(results2.amount0);
   console.log(results2.amount1);
   console.log(results.amount0.add(results2.amount0)); // amount0 + fee = 44071833809710618407
