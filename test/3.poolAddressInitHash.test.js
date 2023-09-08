@@ -139,6 +139,8 @@ describe("check if poolAddress hash is wrong", async function () {
         const oneHundred = new Percent(100,100);
         console.log(oneHundred.multiply(JSBI.BigInt("33329220265679295795561")).quotient.toString());
         console.log(oneHundred.multiply(33329220265679295795561).quotient.toString());
+
+        console.log(getSqrtRatioAtTick(60).toString())
     })
 })
 

@@ -125,26 +125,26 @@ async function main() {
   //console.log(encMultiCall);
   deadline = Math.floor(Date.now() / 1000) + 100000;
   console.log("encMultiCall", encMultiCall);
-  // try {
-  //   // const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-  //   //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
-  //   const txArgs = {
-  //       to: SwapRouterContract.address,
-  //       from: deployer.address,
-  //       data: encMultiCall,
-  //       gasLimit: 300000,
-  //   }
-  //   const tx = await deployer.sendTransaction(txArgs)
-  //   await tx.wait();
-  //   const receipt = await providers.getTransactionReceipt(tx.hash);
-  //   console.log("===TON => ETH (ETH->ERC20)");
-  //   console.log("transactionHash:", receipt.transactionHash);
-  //   console.log("gasUsed: ",receipt.gasUsed);
-  //   console.log();
-  //   totalGasUsed = totalGasUsed.add(receipt.gasUsed);
-  // } catch (e) {
-  //   console.log(e.message);
-  // }
+  try {
+    // const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+    //const tx = await SwapRouterContract.multicall(swapData, {gasLimit:300000});
+    const txArgs = {
+        to: SwapRouterContract.address,
+        from: deployer.address,
+        data: encMultiCall,
+        gasLimit: 300000,
+    }
+    const tx = await deployer.sendTransaction(txArgs)
+    await tx.wait();
+    const receipt = await providers.getTransactionReceipt(tx.hash);
+    console.log("===TON => ETH (ETH->ERC20)");
+    console.log("transactionHash:", receipt.transactionHash);
+    console.log("gasUsed: ",receipt.gasUsed);
+    console.log();
+    totalGasUsed = totalGasUsed.add(receipt.gasUsed);
+  } catch (e) {
+    console.log(e.message);
+  }
 
   // try{
   //     const tx = await SwapRouterContract.multicall([encData1, encData2], {

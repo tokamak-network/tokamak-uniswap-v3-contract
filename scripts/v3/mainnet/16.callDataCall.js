@@ -18,9 +18,9 @@ async function main() {
   // let totalGasUsed = ethers.BigNumber.from("0")
   // ///=========== UniswapV3Factory
   // const UniswapV3FactoryContract = await getContract('UniswapV3Factory');
-  ///=============== NonfungiblePositionManagerContract  
-  const NonfungiblePositionManagerContract = await getContract('NonfungiblePositionManager');
-  const NonfungiblePositionManagerAddress = NonfungiblePositionManagerContract.address;
+  // ///=============== NonfungiblePositionManagerContract  
+  // const NonfungiblePositionManagerContract = await getContract('NonfungiblePositionManager');
+  // const NonfungiblePositionManagerAddress = NonfungiblePositionManagerContract.address;
   // ///=============== TONContract  
   // const TONContract = await getContract('TON');
   // const TONAddress = TONContract.address;
@@ -30,11 +30,9 @@ async function main() {
   //   ///=============== WETHContract
   //   const TOSContract = await getContract('TOS');
   //   const TOSAddress = TOSContract.address;
-  ///=============== TOSContract
-  const USDCContract = await getContract('USDC');
-  const USDCAddress = USDCContract.address;
-  const FRAXContract = await getContract('FRAX');
-  const FRAXAddress = FRAXContract.address;
+  //   ///=============== TOSContract
+  // const USDCContract = await getContract('USDC');
+  // const USDCAddress = USDCContract.address;
   // ///=============== SwapRouterContract  
   // const SwapRouterContract = await getContract('SwapRouter02'); //
   // const SwapRouterAddress = SwapRouterContract.address;
@@ -46,32 +44,15 @@ async function main() {
   // console.log(NonfungiblePositionManagerContract.address);
   // let positionInfo = await NonfungiblePositionManagerContract.positions(21);
   // console.log(positionInfo);
-
   console.log(deployer.address);
-  console.log(NonfungiblePositionManagerContract.address);
   try {
-    await allowFunction(
-      'USDC',
-      USDCContract,
-      deployer.address,
-      NonfungiblePositionManagerAddress
-    )
-    await allowFunction(
-      'FRAX',
-      FRAXContract,
-      deployer.address,
-      NonfungiblePositionManagerAddress
-    )
-    const tx = await NonfungiblePositionManagerContract.increaseLiquidity({
-      tokenId:1004115,
-      amount0Desired:0,
-      amount1Desired:175988251,
-      amount0Min:0,
-      amount1Min:174988251,
-      deadline: Math.floor(Date.now() / 1000) + 1000000000,
-    }, {
-      gasLimit: 3000000
-    })
+    const txArgs = {
+        to: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+        from: deployer.address,
+        data: '0x5ae401dc0000000000000000000000000000000000000000000000000000000064f03bae000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000000e404e45aaf00000000000000000000000067f3be272b1913602b191b3a68f7c238a2d81bb9000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d60000000000000000000000000000000000000000000000000000000000000bb800000000000000000000000068b3465833fb72a70ecdf485e0e4c7bd8665fc450000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000182d22ab3b9b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002449616997000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+        gasLimit: 3000000,
+    }
+    const tx = await deployer.sendTransaction(txArgs)
     await tx.wait();
     console.log(tx);
     const receipt = await providers.getTransactionReceipt(tx.hash);
@@ -89,24 +70,3 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-
-async function allowFunction(tokenName, tokenContract, sender, spender) {
-  let minimumallowanceAmount = ethers.utils.parseEther('100000000000');
-  let allowance = await tokenContract.allowance(sender, spender);
-  console.log(`${tokenName} approved amount:`, allowance);
-  if (allowance.lt(minimumallowanceAmount)) {
-    const tx = await tokenContract.approve(spender, allowanceAmount);
-    await tx.wait();
-    expect(await tokenContract.allowance(sender, spender)).to.equal(
-      allowanceAmount
-    );
-    console.log(`${tokenName} ${allowanceAmount} * 10e18 amount Approved`);
-    const receipt = await providers.getTransactionReceipt(tx.hash);
-    console.log('transactionHash:', receipt.transactionHash);
-    console.log('gasUsed: ', receipt.gasUsed);
-    console.log();
-    return receipt.gasUsed;
-  } else {
-    return ethers.BigNumber.from('0');
-  }
-}
