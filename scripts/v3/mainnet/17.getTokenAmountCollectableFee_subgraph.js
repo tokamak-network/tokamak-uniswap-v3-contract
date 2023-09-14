@@ -35,6 +35,7 @@ const SUBGRAPH_URL =
       }
       feeGrowthInside0LastX128
       feeGrowthInside1LastX128
+      id
     }
   }
 `;
@@ -64,6 +65,7 @@ async function main() {
   const tokenOweds = getTokensOwed(feeGrowthInside0LastX128,feeGrowthInside1LastX128,liquiditySub,feeGrowthInside0X128, feeGrowthInside1X128);
   const tokenOwed0 = tokenOweds[0];
   const tokenOwed1 = tokenOweds[1]; 
+  ///////////////
 
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
@@ -76,11 +78,15 @@ async function main() {
     UniswapV3PoolArtifact.bytecode,
     deployer
   );
-  let tokenId = 10;
+
+  let tokenId = parseInt(position10.id);
   let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   const tokenOwed0Already = positionInfo.tokensOwed0;
   const tokenOwed1Already = positionInfo.tokensOwed1;
   console.log(tokenOwed0Already, tokenOwed1Already);
+
+  ///////////////
+
   console.log("token0AmountFeeToBeCollected, ",(ethers.BigNumber.from(tokenOwed0.toString())).add(tokenOwed0Already).toString()); // amount0 + fee = 44071833809710618407
   console.log("token1AmountFeeToBeCollected, ",(ethers.BigNumber.from(tokenOwed1.toString())).add(tokenOwed1Already).toString()); // amount1 + fee = 18546165554919205637
 }

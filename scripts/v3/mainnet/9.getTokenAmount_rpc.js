@@ -50,9 +50,9 @@ async function main() {
     deployer
   );
   let UniswapV3PoolContract = UniswapV3Pool_.attach(
-    '0x9EF32Ae2acAF105557DB0E98E68c6CD4f1A1aE63'
+    '0x2c1c509942d4f55e2bfd2b670e52b7a16ec5e5c4'
   );
-  let tokenId = 77558;
+  let tokenId = 10;
   let positionInfo = await NonfungiblePositionManagerContract.positions(tokenId);
   let liquidity = JSBI.BigInt(positionInfo.liquidity.toString());
   const tickLower = positionInfo.tickLower;
