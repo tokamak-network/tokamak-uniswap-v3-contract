@@ -17,9 +17,9 @@ module.exports = {
         //url:`https://goerli.optimism.tokamak.network`
          //url: 'https://rpc.titan.tokamak.network',
          //url: 'https://rpc.titan-goerli.tokamak.network',
-         url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
+         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+        url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       },
       
     },
@@ -31,9 +31,9 @@ module.exports = {
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
         //url: 'https://rpc.titan.tokamak.network',
         //url: 'https://rpc.titan-goerli.tokamak.network',
-        url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
+        //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url:`https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
-        //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+        url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       },
       accounts: [`${process.env.PRIVATE_KEY1}`, `${process.env.PRIVATE_KEY2}`],
       // gas: 1
