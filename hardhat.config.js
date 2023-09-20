@@ -1,27 +1,27 @@
-require('@nomicfoundation/hardhat-toolbox');
-require('@uniswap/hardhat-v3-deploy');
-require('@tokamak-network/tokamak-uniswap-v3-deploy');
-require('dotenv/config');
-require('dotenv').config();
-require('./tasks/interface');
+require("@nomicfoundation/hardhat-toolbox");
+require("@uniswap/hardhat-v3-deploy");
+require("@tokamak-network/tokamak-uniswap-v3-deploy");
+require("dotenv/config");
+require("dotenv").config();
+require("./tasks/interface");
 
 module.exports = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: "hardhat",
   live: false,
   networks: {
     hardhat: {
       chainId: 31337,
       forking: {
         //url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
-         //blockNumber: 21186,
+        //blockNumber: 21186,
         //url:`https://goerli.optimism.tokamak.network`
-         //url: 'https://rpc.titan.tokamak.network',
-         //url: 'https://rpc.titan-goerli.tokamak.network',
-         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
+        url: "https://rpc.titan.tokamak.network",
+        //blockNumber: 1308,
+        //url: 'https://rpc.titan-goerli.tokamak.network',
+        //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+        //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       },
-      
     },
     localhost: {
       chainId: 31337,
@@ -29,20 +29,21 @@ module.exports = {
         //url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
         //blockNumber: 21186,
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        //url: 'https://rpc.titan.tokamak.network',
+        url: "https://rpc.titan.tokamak.network",
+        //blockNumber: 1308,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url:`https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
-        url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+        //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       },
-      accounts: [`${process.env.PRIVATE_KEY1}`, `${process.env.PRIVATE_KEY2}`],
+      accounts: [`${process.env.PRIVATE_KEY1}`],
       // gas: 1
       // accounts: [`${process.env.PRIVATE_KEY}`,`${process.env.LOCAL_KEY}`,`${process.env.LOCAL_KEY2}`,`${process.env.LOCAL_KEY3}`,`${process.env.LOCAL_KEY4}`,`${process.env.LOCAL_KEY5}`,`${process.env.LOCAL_KEY6}`,`${process.env.LOCAL_KEY7}`]
     },
     polygon: {
       chainId: 137,
       url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
-      accounts: [`${process.env.PRIVATE_KEY1}`]
+      accounts: [`${process.env.PRIVATE_KEY1}`],
     },
     goerli: {
       chainId: 5,
@@ -64,11 +65,11 @@ module.exports = {
       accounts: [`${process.env.PRIVATE_KEY1}`],
     },
     titan: {
-      url: 'https://rpc.titan.tokamak.network',
+      url: "https://rpc.titan.tokamak.network",
       accounts: [`${process.env.PRIVATE_KEY1}`],
       chainId: 55004,
       gasPrice: 1000000000,
-      deploy: ['deploy_titan'],
+      deploy: ["deploy_titan"],
     },
   },
   etherscan: {
@@ -77,19 +78,19 @@ module.exports = {
     apiKey: process.env.ETHERSCAN_API_KEY,
     customChains: [
       {
-        network: 'tokamakgoerli',
+        network: "tokamakgoerli",
         chainId: 5050,
         urls: {
-          apiURL: 'https://goerli.explorer.tokamak.network/api',
-          browserURL: 'https://goerli.explorer.tokamak.network',
+          apiURL: "https://goerli.explorer.tokamak.network/api",
+          browserURL: "https://goerli.explorer.tokamak.network",
         },
       },
       {
-        network: 'titan',
+        network: "titan",
         chainId: 55004,
         urls: {
-          apiURL: 'https://explorer.titan.tokamak.network/api',
-          browserURL: 'https://explorer.titan.tokamak.network',
+          apiURL: "https://explorer.titan.tokamak.network/api",
+          browserURL: "https://explorer.titan.tokamak.network",
         },
       },
     ],
@@ -97,7 +98,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: '0.8.17',
+        version: "0.8.17",
         settings: {
           optimizer: {
             enabled: true,
@@ -106,7 +107,7 @@ module.exports = {
         },
       },
       {
-        version: '0.7.6',
+        version: "0.7.6",
       },
     ],
   },
