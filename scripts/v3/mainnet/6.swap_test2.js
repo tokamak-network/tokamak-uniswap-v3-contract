@@ -29,6 +29,9 @@ async function main() {
   ///=============== WETHContract
   const TOSContract = await getContract("TOS");
   const TOSAddress = TOSContract.address;
+  ///=============== WTONContract
+  const WTONContract = await getContract("WTON");
+  const WTONAddress = WTONContract.address;
   ///=============== SwapRouterContract
   const SwapRouterContract = await getContract("SwapRouter02");
   const SwapRouterAddress = SwapRouterContract.address;
@@ -59,35 +62,35 @@ async function main() {
 
   let deadline = Date.now() + 100000;
 
-  let amountIn = ethers.utils.parseEther("5");
+  let amountIn = ethers.utils.parseEther("2");
   //==============TOS => TOS (ERC20->ERC20)
-  // let SwapParams = {
-  //   tokenIn: TOSAddress,
-  //   tokenOut: TONAddress,
-  //   fee: 3000,
-  //   recipient: deployer.address,
-  //   //deadline: deadline,
-  //   amountIn: amountIn,
-  //   amountOutMinimum: 0,
-  //   sqrtPriceLimitX96: 0,
-  // };
-  // try {
-  //   const tx = await SwapRouterContract.exactInputSingle(SwapParams, {
-  //     gasLimit: 3000000,
-  //   });
-  //   await tx.wait();
-  //   const receipt = await providers.getTransactionReceipt(tx.hash);
-  //   console.log("===TOS => TON (ERC20->ERC20)");
-  //   console.log("transactionHash:", receipt.transactionHash);
-  //   console.log("gasUsed: ", receipt.gasUsed);
-  //   console.log();
-  //   totalGasUsed = totalGasUsed.add(receipt.gasUsed);
-  // } catch (e) {
-  //   console.log("e", e.message);
-  // }
-  SwapParams = {
-    tokenIn: TONAddress,
+  let SwapParams = {
+    tokenIn: WTONAddress,
     tokenOut: TOSAddress,
+    fee: 3000,
+    recipient: deployer.address,
+    //deadline: deadline,
+    amountIn: amountIn,
+    amountOutMinimum: 0,
+    sqrtPriceLimitX96: 0,
+  };
+  try {
+    const tx = await SwapRouterContract.exactInputSingle(SwapParams, {
+      gasLimit: 3000000,
+    });
+    await tx.wait();
+    const receipt = await providers.getTransactionReceipt(tx.hash);
+    console.log("===TOS => TON (ERC20->ERC20)");
+    console.log("transactionHash:", receipt.transactionHash);
+    console.log("gasUsed: ", receipt.gasUsed);
+    console.log();
+    totalGasUsed = totalGasUsed.add(receipt.gasUsed);
+  } catch (e) {
+    console.log("e", e.message);
+  }
+  SwapParams = {
+    tokenIn: TOSAddress,
+    tokenOut: WTONAddress,
     fee: 3000,
     recipient: deployer.address,
     //deadline: deadline,
