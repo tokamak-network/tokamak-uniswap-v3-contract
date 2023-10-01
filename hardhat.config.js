@@ -16,7 +16,7 @@ module.exports = {
         //blockNumber: 21186,
         //url:`https://goerli.optimism.tokamak.network`
         url: "https://rpc.titan.tokamak.network",
-        //blockNumber: 1308,
+        blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
@@ -30,21 +30,21 @@ module.exports = {
         //blockNumber: 21186,
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
         url: "https://rpc.titan.tokamak.network",
-        //blockNumber: 1308,
+        blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url:`https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
         //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       },
-      accounts: [`${process.env.PRIVATE_KEY1}`],
+      // accounts: [`${process.env.PRIVATE_KEY1}`],
       // gas: 1
       // accounts: [`${process.env.PRIVATE_KEY}`,`${process.env.LOCAL_KEY}`,`${process.env.LOCAL_KEY2}`,`${process.env.LOCAL_KEY3}`,`${process.env.LOCAL_KEY4}`,`${process.env.LOCAL_KEY5}`,`${process.env.LOCAL_KEY6}`,`${process.env.LOCAL_KEY7}`]
     },
-    polygon: {
-      chainId: 137,
-      url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
-      accounts: [`${process.env.PRIVATE_KEY1}`],
-    },
+    // polygon: {
+    //   chainId: 137,
+    //   url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
+    //   accounts: [`${process.env.PRIVATE_KEY1}`],
+    // },
     goerli: {
       chainId: 5,
       //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
@@ -52,13 +52,13 @@ module.exports = {
       timeout: 200000,
       accounts: [`${process.env.PRIVATE_KEY1}`],
     },
-    sepolia: {
-      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      accounts: [`${process.env.PRIVATE_KEY1}`],
-      chainId: 11155111,
-      blockConfirmations: 6,
-    },
-    tokamakgoerli: {
+    // sepolia: {
+    //   url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+    //   accounts: [`${process.env.PRIVATE_KEY1}`],
+    //   chainId: 11155111,
+    //   blockConfirmations: 6,
+    // },
+    titangoerli: {
       chainId: 5050,
       url: `https://rpc.titan-goerli.tokamak.network`,
       timeout: 200000,
@@ -78,11 +78,11 @@ module.exports = {
     apiKey: process.env.ETHERSCAN_API_KEY,
     customChains: [
       {
-        network: "tokamakgoerli",
+        network: "titangoerli",
         chainId: 5050,
         urls: {
-          apiURL: "https://goerli.explorer.tokamak.network/api",
-          browserURL: "https://goerli.explorer.tokamak.network",
+          apiURL: "https://explorer.titan-goerli.tokamak.network/api",
+          browserURL: "https://explorer.titan-goerli.tokamak.network",
         },
       },
       {

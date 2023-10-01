@@ -1,7 +1,7 @@
 /**
  *Submitted for verification at Etherscan.io on 2021-04-29
 */
-import "hardhat/console.sol";
+
 /**
  *Submitted for verification at Etherscan.io on 2021-03-23
 */
@@ -28,10 +28,7 @@ contract Multicall2 {
         blockNumber = block.number;
         returnData = new bytes[](calls.length);
         for(uint256 i = 0; i < calls.length; i++) {
-            console.log(calls[i].target);
-            console.logBytes(calls[i].callData);
             (bool success, bytes memory ret) = calls[i].target.call(calls[i].callData);
-            console.logString(string(ret));
             require(success, "Multicall aggregate: call failed");
             returnData[i] = ret;
         }
