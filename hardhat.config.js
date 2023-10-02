@@ -15,7 +15,7 @@ module.exports = {
         //url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
         //blockNumber: 21186,
         //url:`https://goerli.optimism.tokamak.network`
-        url: "https://rpc.titan.tokamak.network",
+        url: "https://rpc.titan-goerli.tokamak.network",
         blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
@@ -29,7 +29,7 @@ module.exports = {
         //url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
         //blockNumber: 21186,
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        url: "https://rpc.titan.tokamak.network",
+        url: "https://rpc.titan-goerli.tokamak.network",
         blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`

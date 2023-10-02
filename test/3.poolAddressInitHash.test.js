@@ -11,6 +11,7 @@ const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
 const { Pool } = require("@uniswap/v3-sdk");
 const { Percent, BigintIsh } = require("@uniswap/sdk-core");
+const { encodePriceSqrt } = require("../scripts/utils.js");
 
 function toHex(bigintIsh) {
   const bigInt = JSBI.BigInt(bigintIsh);
@@ -199,6 +200,20 @@ describe("check if poolAddress hash is wrong", async function () {
         JSBI.BigInt("92979860367883423878727417014")
       ).toString()
     );
+    console.log("-----");
+    console.log(encodePriceSqrt(1, 1.18764));
+    console.log(encodePriceSqrt(1.18764, 1));
+    console.log(encodePriceSqrt(1, 0.842));
+    console.log(encodePriceSqrt(0.842, 1));
+    console.log(encodePriceSqrt(1192.55, 1));
+    console.log(encodePriceSqrt(1, 1192.55));
+    console.log(encodePriceSqrt(1, 0.75058));
+    console.log(encodePriceSqrt(0.75058, 1));
+    console.log(encodePriceSqrt(1000000, 1718.79));
+    console.log(encodePriceSqrt(1718.79, 1000000));
+    console.log(encodePriceSqrt(1000000000, 1.71879));
+    console.log(encodePriceSqrt(1.71879, 1000000000));
+    console.log(encodePriceSqrt(1718.79, 1));
   });
 });
 

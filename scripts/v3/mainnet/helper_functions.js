@@ -1,10 +1,10 @@
-const fs = require('fs');
-const ethers = require('ethers');
-const hre = require('hardhat');
+const fs = require("fs");
+const ethers = require("ethers");
+const hre = require("hardhat");
 const chainName = hre.network.name;
-const ERC20PresetFixedSupplyJson = require('@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json');
-const ERC20PresetFixedSupplyDecimal6TestJson = require('../abis/ERC20PresetFixedSupplyDecimal6Test.sol/ERC20PresetFixedSupplyDecimal6Test.json');
-const WETH9Json = require('../../abis/WETH9.json');
+const ERC20PresetFixedSupplyJson = require("@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json");
+const ERC20PresetFixedSupplyDecimal6TestJson = require("../abis/ERC20PresetFixedSupplyDecimal6Test.sol/ERC20PresetFixedSupplyDecimal6Test.json");
+const WETH9Json = require("../../abis/WETH9.json");
 
 const deployContract = async () => {
   let contractAddresses = JSON.parse(
@@ -12,7 +12,7 @@ const deployContract = async () => {
       .readFileSync(__dirname + `/../../../deployed.uniswap.${chainName}.json`)
       .toString()
   );
-  if (chainName === 'localhost') {
+  if (chainName === "localhost") {
     contractAddresses = JSON.parse(
       fs
         .readFileSync(
@@ -20,7 +20,7 @@ const deployContract = async () => {
         )
         .toString()
     );
-    if (contractAddresses['TON'] === undefined) {
+    if (contractAddresses["TON"] === undefined) {
       console.log(true);
       const accounts = await hre.ethers.getSigners();
       const deployer = accounts[0];
@@ -30,15 +30,15 @@ const deployContract = async () => {
         deployer
       );
       const TONcontract = await contractFactory.deploy(
-        'TON',
-        'TON',
-        ethers.utils.parseEther('10000000000000'),
+        "TON",
+        "TON",
+        ethers.utils.parseEther("10000000000000"),
         deployer.address
       );
       const TOScontract = await contractFactory.deploy(
-        'TOS',
-        'TOS',
-        ethers.utils.parseEther('10000000000000'),
+        "TOS",
+        "TOS",
+        ethers.utils.parseEther("10000000000000"),
         deployer.address
       );
 
@@ -55,15 +55,15 @@ const deployContract = async () => {
         deployer
       );
       const USDTcontract = await contractFactory.deploy(
-        'USDT',
-        'USDT',
-        ethers.utils.parseEther('10000000000000'),
+        "USDT",
+        "USDT",
+        ethers.utils.parseEther("10000000000000"),
         deployer.address
       );
       const USDCcontract = await contractFactory.deploy(
-        'USDC',
-        'USDC',
-        ethers.utils.parseEther('10000000000000'),
+        "USDC",
+        "USDC",
+        ethers.utils.parseEther("10000000000000"),
         deployer.address
       );
 
@@ -85,27 +85,27 @@ const getContract = async (contractName) => {
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
   providers = hre.ethers.provider;
-  if (chainName === 'hardhat')
+  if (chainName === "hardhat")
     deployer = await hre.ethers.getImpersonatedSigner(
-      '0xB68AA9E398c054da7EBAaA446292f611CA0CD52B'
+      "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B"
     );
 
   let jsonFile;
   if (
-    contractName === 'TON' ||
-    contractName === 'TOS' ||
-    contractName === 'WETH' || contractName === 'FRAX'
+    contractName === "TON" ||
+    contractName === "TOS" ||
+    contractName === "WETH"
   ) {
     jsonFile = JSON.parse(
-      fs.readFileSync(__dirname + '/../../abis/IERC20.json').toString()
+      fs.readFileSync(__dirname + "/../../abis/IERC20.json").toString()
     );
-  } else if (contractName === 'USDC') {
+  } else if (contractName === "USDC") {
     jsonFile = JSON.parse(
-      fs.readFileSync(__dirname + '/../abis/usdcabi.json').toString()
+      fs.readFileSync(__dirname + "/../abis/usdcabi.json").toString()
     );
-  } else if (contractName === 'USDT') {
+  } else if (contractName === "USDT") {
     jsonFile = JSON.parse(
-      fs.readFileSync(__dirname + '/../abis/usdtabi.json').toString()
+      fs.readFileSync(__dirname + "/../abis/usdtabi.json").toString()
     );
   } else {
     jsonFile = JSON.parse(
@@ -123,8 +123,10 @@ const getContract = async (contractName) => {
   );
   let contractAddress = contractAddresses[contractName];
   let contractCode = await providers.getCode(contractAddress);
-  if (contractCode === '0x') {
-    console.log(contractName + 'Contract Code is null, exit');
+  if (contractCode === "0x") {
+    console.log(contractName + "Contract Code is null, exit");
+    console.log("network is " + chainName);
+    console.log("contractAddress is " + contractAddress);
     process.exit();
   }
   const contractFactory = new ethers.ContractFactory(
@@ -148,7 +150,7 @@ const getPoolContractAddress = async (
     Fee
   );
   let poolCode = await providers.getCode(poolAddress);
-  if (poolCode === '0x') {
+  if (poolCode === "0x") {
     console.log(`poolAddress is ${poolAddress}, so you should deploy`);
   }
   return poolAddress;
@@ -168,7 +170,7 @@ async function exit(
 ) {
   let providers = hre.ethers.provider;
   const decreaseLiquidityData = nft.interface.encodeFunctionData(
-    'decreaseLiquidity',
+    "decreaseLiquidity",
     [
       {
         tokenId,
@@ -179,7 +181,7 @@ async function exit(
       },
     ]
   );
-  const collectData = nft.interface.encodeFunctionData('collect', [
+  const collectData = nft.interface.encodeFunctionData("collect", [
     {
       tokenId,
       recipient,
@@ -187,7 +189,7 @@ async function exit(
       amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
     },
   ]);
-  const burnData = nft.interface.encodeFunctionData('burn', [tokenId]);
+  const burnData = nft.interface.encodeFunctionData("burn", [tokenId]);
   try {
     const tx = await nft.multicall([
       decreaseLiquidityData,
@@ -216,7 +218,7 @@ async function exitForETH(
 ) {
   let providers = hre.ethers.provider;
   const decreaseLiquidityData = nft.interface.encodeFunctionData(
-    'decreaseLiquidity',
+    "decreaseLiquidity",
     [
       {
         tokenId,
@@ -227,25 +229,25 @@ async function exitForETH(
       },
     ]
   );
-  const collectData = nft.interface.encodeFunctionData('collect', [
+  const collectData = nft.interface.encodeFunctionData("collect", [
     {
       tokenId,
-      recipient: '0x0000000000000000000000000000000000000000',
+      recipient: "0x0000000000000000000000000000000000000000",
       amount0Max: ethers.BigNumber.from(2).pow(128).sub(1),
       amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
     },
   ]);
   const amountMinimum = 0;
-  const unwrapWETH9 = nft.interface.encodeFunctionData('unwrapWETH9', [
+  const unwrapWETH9 = nft.interface.encodeFunctionData("unwrapWETH9", [
     amountMinimum,
     recipient,
   ]);
-  const sweepToken = nft.interface.encodeFunctionData('sweepToken', [
+  const sweepToken = nft.interface.encodeFunctionData("sweepToken", [
     sweepTokenAddress,
     amountMinimum,
     recipient,
   ]);
-  const burnData = nft.interface.encodeFunctionData('burn', [tokenId]);
+  const burnData = nft.interface.encodeFunctionData("burn", [tokenId]);
   try {
     const tx = await nft.multicall(
       [decreaseLiquidityData, collectData, unwrapWETH9, sweepToken, burnData],
@@ -281,7 +283,7 @@ async function swapToERC20(
   };
   try {
     let tx;
-    if (tokenIn === '0x4200000000000000000000000000000000000006') {
+    if (tokenIn === "0x4200000000000000000000000000000000000006") {
       tx = await SwapRouterContract.exactInputSingle(SwapParams, {
         gasLimit: 3000000,
         value: amountIn,
@@ -294,12 +296,12 @@ async function swapToERC20(
     await tx.wait();
     const receipt = await providers.getTransactionReceipt(tx.hash);
     console.log(`===${tokenInName} => ${tokenOutName} ERC20|ETH -> ERC20`);
-    console.log('transactionHash:', receipt.transactionHash);
-    console.log('gasUsed: ', receipt.gasUsed);
+    console.log("transactionHash:", receipt.transactionHash);
+    console.log("gasUsed: ", receipt.gasUsed);
     console.log();
     return receipt.gasUsed;
   } catch (e) {
-    console.log('e', e.message);
+    console.log("e", e.message);
   }
 }
 
@@ -324,12 +326,12 @@ async function swapToETH(
     sqrtPriceLimitX96: 0,
   };
   const encData1 = SwapRouterContract.interface.encodeFunctionData(
-    'exactInputSingle',
+    "exactInputSingle",
     [params1]
   );
   const amountMinimum = 0;
   const encData2 = SwapRouterContract.interface.encodeFunctionData(
-    'unwrapWETH9',
+    "unwrapWETH9",
     [amountMinimum, deployer.address]
   );
   try {
@@ -339,12 +341,12 @@ async function swapToETH(
     await tx.wait();
     const receipt = await providers.getTransactionReceipt(tx.hash);
     console.log(`===${tokenInName} => ${tokenOutName} ERC20->ETH`);
-    console.log('transactionHash:', receipt.transactionHash);
-    console.log('gasUsed: ', receipt.gasUsed);
+    console.log("transactionHash:", receipt.transactionHash);
+    console.log("gasUsed: ", receipt.gasUsed);
     console.log();
     return receipt.gasUsed;
   } catch (e) {
-    console.log('e', e.message);
+    console.log("e", e.message);
   }
 }
 

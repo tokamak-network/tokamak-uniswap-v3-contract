@@ -1,46 +1,45 @@
-const ethers = require('ethers');
-require('dotenv').config();
-const hre = require('hardhat');
-const fs = require('fs');
+const ethers = require("ethers");
+require("dotenv").config();
+const hre = require("hardhat");
+const fs = require("fs");
 const {
   getContract,
   getPoolContractAddress,
-} = require('./helper_functions.js');
-const { encodePriceSqrt } = require('../../utils.js');
-const Fee = ethers.BigNumber.from('3000');
+} = require("./helper_functions.js");
+const { encodePriceSqrt } = require("../../utils.js");
+const Fee = ethers.BigNumber.from("3000");
 
 async function main() {
   const chainName = hre.network.name;
   const accounts = await hre.ethers.getSigners();
   let deployer = accounts[0];
   providers = hre.ethers.provider;
-  let totalGasUsed = ethers.BigNumber.from('0');
-  if (chainName === 'hardhat')
+  let totalGasUsed = ethers.BigNumber.from("0");
+  if (chainName === "hardhat")
     deployer = await hre.ethers.getImpersonatedSigner(
-      '0xB68AA9E398c054da7EBAaA446292f611CA0CD52B'
+      "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B"
     );
-
   ///=========== UniswapV3Factory
-  const UniswapV3FactoryContract = await getContract('UniswapV3Factory');
+  const UniswapV3FactoryContract = await getContract("UniswapV3Factory");
   ///=============== NonfungiblePositionManagerContract
   const NonfungiblePositionManagerContract = (
-    await getContract('NonfungiblePositionManager')
+    await getContract("NonfungiblePositionManager")
   ).connect(deployer);
-  console.log('');
+
   ///=============== TONContract
-  const TONContract = await getContract('TON');
+  const TONContract = await getContract("TON");
   const TONAddress = TONContract.address;
   ///=============== TOSContract
-  const TOSContract = await getContract('TOS');
+  const TOSContract = await getContract("TOS");
   const TOSAddress = TOSContract.address;
   ///=============== WETHContract
-  const WETHContract = await getContract('WETH');
+  const WETHContract = await getContract("WETH");
   const WETHAddress = WETHContract.address;
   ///=============== TOSContract
-  const USDCContract = await getContract('USDC');
+  const USDCContract = await getContract("USDC");
   const USDCAddress = USDCContract.address;
   ///=============== WETHContract
-  const USDTContract = await getContract('USDT');
+  const USDTContract = await getContract("USDT");
   const USDTAddress = USDTContract.address;
 
   let poolAddressTOSTON = await getPoolContractAddress(
@@ -74,7 +73,7 @@ async function main() {
     Fee
   );
 
-  if (poolAddressTOSTON === '0x0000000000000000000000000000000000000000') {
+  if (poolAddressTOSTON === "0x0000000000000000000000000000000000000000") {
     //1 WTON = 0.75058 TOS
     //1 TOS = 1.3323 WTON
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
@@ -82,15 +81,15 @@ async function main() {
       token0 = TONAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 0.75058;
+      reserve1 = 1.18874;
     } else {
       token0 = TOSAddress;
-      reserve0 = 1;
+      reserve0 = 1.18874;
       token1 = TONAddress;
-      reserve1 = 1.3323;
+      reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log('======createAndInitialize poolAddressWETHTON=======');
+    console.log("======createAndInitialize poolAddressWETHTON=======");
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -101,7 +100,7 @@ async function main() {
     );
   }
 
-  if (poolAddressWETHTOS === '0x0000000000000000000000000000000000000000') {
+  if (poolAddressWETHTOS === "0x0000000000000000000000000000000000000000") {
     //1 TOS = 0.0011 ETH
     //1 ETH = 912.128 TOS
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
@@ -109,15 +108,15 @@ async function main() {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 912.128;
+      reserve1 = 1192.55;
     } else {
       token0 = TOSAddress;
-      reserve0 = 912.128;
+      reserve0 = 1192.55;
       token1 = WETHAddress;
       reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log('======createAndInitialize poolAddressWETHTOS=======');
+    console.log("======createAndInitialize poolAddressWETHTOS=======");
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -128,7 +127,7 @@ async function main() {
     );
   }
 
-  if (poolAddressWETHTON === '0x0000000000000000000000000000000000000000') {
+  if (poolAddressWETHTON === "0x0000000000000000000000000000000000000000") {
     //1 ETH = 1,231.38 WTON TON
     //1 WTON = 0.00081 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
@@ -136,15 +135,15 @@ async function main() {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TONAddress;
-      reserve1 = 1,231.38;
+      reserve1 = 1050.68;
     } else {
       token0 = TONAddress;
-      reserve0 = 1,231.38;
+      reserve0 = 1050.68;
       token1 = WETHAddress;
       reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log('======createAndInitialize poolAddressWETHTON=======');
+    console.log("======createAndInitialize poolAddressWETHTON=======");
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -155,7 +154,7 @@ async function main() {
     );
   }
 
-  if (poolAddressWETHUSDC === '0x0000000000000000000000000000000000000000') {
+  if (poolAddressWETHUSDC === "0x0000000000000000000000000000000000000000") {
     //1 ETH = 1,853.50 USDC
     //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
@@ -166,15 +165,15 @@ async function main() {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDCAddress;
-      reserve1 = 1.8535;
+      reserve1 = 1.71879;
     } else {
       token0 = USDCAddress;
-      reserve0 = 1.8535;
+      reserve0 = 1.71879;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log('======createAndInitialize poolAddressWETHUSDC=======');
+    console.log("======createAndInitialize poolAddressWETHUSDC=======");
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -185,7 +184,7 @@ async function main() {
     );
   }
 
-  if (poolAddressWETHUSDT === '0x0000000000000000000000000000000000000000') {
+  if (poolAddressWETHUSDT === "0x0000000000000000000000000000000000000000") {
     //1 ETH = 1,853.50 USDC
     //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
@@ -196,15 +195,15 @@ async function main() {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDTAddress;
-      reserve1 = 1.8535;
+      reserve1 = 1.71879;
     } else {
       token0 = USDTAddress;
-      reserve0 = 1.8535;
+      reserve0 = 1.71879;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log('======createAndInitialize poolAddressWETHUSDT=======');
+    console.log("======createAndInitialize poolAddressWETHUSDT=======");
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -214,7 +213,7 @@ async function main() {
       )
     );
   }
-  console.log('totalGasUsed:', totalGasUsed);
+  console.log("totalGasUsed:", totalGasUsed);
   await writeAddresses(
     UniswapV3FactoryContract,
     chainName,
@@ -241,8 +240,8 @@ async function createPool(
     );
   await tx.wait();
   const receipt = await providers.getTransactionReceipt(tx.hash);
-  console.log('transactionHash:', receipt.transactionHash);
-  console.log('gasUsed: ', receipt.gasUsed);
+  console.log("transactionHash:", receipt.transactionHash);
+  console.log("gasUsed: ", receipt.gasUsed);
   console.log();
   return receipt.gasUsed;
 }
@@ -286,24 +285,24 @@ async function writeAddresses(
     USDTAddress,
     Fee
   );
-  console.log('poolAddressTOSTON:', poolAddressTOSTON);
-  console.log('poolAddressWETHTOS:', poolAddressWETHTOS);
-  console.log('poolAddressWETHTON:', poolAddressWETHTON);
-  console.log('poolAddressWETHUSDC:', poolAddressWETHUSDC);
-  console.log('poolAddressWETHUSDT:', poolAddressWETHUSDT);
+  console.log("poolAddressTOSTON:", poolAddressTOSTON);
+  console.log("poolAddressWETHTOS:", poolAddressWETHTOS);
+  console.log("poolAddressWETHTON:", poolAddressWETHTON);
+  console.log("poolAddressWETHUSDC:", poolAddressWETHUSDC);
+  console.log("poolAddressWETHUSDT:", poolAddressWETHUSDT);
   if (!fs.existsSync(`deployed.uniswap.${chainName}.poolAddress.json`)) {
-    fs.writeFileSync(`deployed.uniswap.${chainName}.poolAddress.json`, '{}', {
-      flag: 'w',
+    fs.writeFileSync(`deployed.uniswap.${chainName}.poolAddress.json`, "{}", {
+      flag: "w",
     });
   }
   let data = JSON.parse(
     fs.readFileSync(`deployed.uniswap.${chainName}.poolAddress.json`).toString()
   );
-  data['TOS_TON'] = poolAddressTOSTON;
-  data['WETH_TOS'] = poolAddressWETHTOS;
-  data['WETH_TON'] = poolAddressWETHTON;
-  data['WETH_USDC'] = poolAddressWETHUSDC;
-  data['WETH_USDT'] = poolAddressWETHUSDT;
+  data["TOS_TON"] = poolAddressTOSTON;
+  data["WETH_TOS"] = poolAddressWETHTOS;
+  data["WETH_TON"] = poolAddressWETHTON;
+  data["WETH_USDC"] = poolAddressWETHUSDC;
+  data["WETH_USDT"] = poolAddressWETHUSDT;
   fs.writeFileSync(
     `deployed.uniswap.${chainName}.poolAddress.json`,
     JSON.stringify(data, null, 2)
