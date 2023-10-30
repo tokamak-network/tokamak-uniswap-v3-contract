@@ -58,7 +58,7 @@ query pools {
 async function main() {
   const result = await axios.post(SUBGRAPH_URL, { query: TOKEN_IDS_QUERY });
   const pools = result.data.data.pools;
-  let sum = 0n;
+  let sum = 0;
   const ethPriceUSD = parseFloat(result.data.data?.bundles?.[0]?.ethPriceUSD)
   for (let i = 0; i < pools.length; i++) {
     //sum of totalValueLockedUSD
@@ -75,11 +75,11 @@ async function main() {
     if (tvlUpdated) {
       tvlUSD = tvlUpdated
     }
-    sum += BigInt(Math.floor(tvlUSD));
+    sum += tvlUSD;
   }
 
 
-  console.log('Total Value Locked in USD: ', sum.toString());
+  console.log('TVLOffset: ', sum.toString());
 }
 
 main().catch((error) => {
