@@ -59,6 +59,7 @@ async function main() {
   const result = await axios.post(SUBGRAPH_URL, { query: TOKEN_IDS_QUERY });
   const pools = result.data.data.pools;
   let sum = 0n;
+  const ethPriceUSD = parseFloat(result.data.data?.bundles?.[0]?.ethPriceUSD)
   for (let i = 0; i < pools.length; i++) {
     //sum of totalValueLockedUSD
     //const totalValueLockedUSD = Math.floor(pools[i].totalValueLockedUSD * 1);
@@ -70,7 +71,7 @@ async function main() {
     let tvlUSD = parseFloat(pools[i].totalValueLockedUSD)
 
     // Part of TVL fix
-    const tvlUpdated = tvlToken0 * parseFloat(pools[i].token0.derivedETH) * (result.data.data.bundles[0].ethPriceUSD * 1) + tvlToken1 * parseFloat(pools[i].token1.derivedETH) * (result.data.data.bundles[0].ethPriceUSD * 1)
+    const tvlUpdated = tvlToken0 * parseFloat(pools[i].token0.derivedETH) * ethPriceUSD + tvlToken1 * parseFloat(pools[i].token1.derivedETH) * ethPriceUSD
     if (tvlUpdated) {
       tvlUSD = tvlUpdated
     }
