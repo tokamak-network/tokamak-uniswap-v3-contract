@@ -103,25 +103,25 @@ async function main() {
   let token0Address = TOSAddress < TONAddress ? TOSAddress : TONAddress;
   let token1Address = TOSAddress < TONAddress ? TONAddress : TOSAddress;
   /////////////////////// mint liquidity
-  mintArgs = {
-    token0: token0Address,
-    token1: token1Address,
-    fee: 3000,
-    tickLower: minTick,
-    tickUpper: maxTick,
-    amount0Desired: ethers.BigNumber.from("20000000000000000000"),
-    amount1Desired: ethers.BigNumber.from("20000000000000000000"),
-    amount0Min: ethers.BigNumber.from("0"),
-    amount1Min: ethers.BigNumber.from("0"),
-    recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
-    deadline: ethers.BigNumber.from("11963744845"),
-  };
-  tx = await NonfungiblePositionManagerContract.mint(mintArgs, {
-    gasLimit: 3000000,
-  });
-  await tx.wait();
-  receipt = await providers.getTransactionReceipt(tx.hash);
-  console.log(receipt);
+  // mintArgs = {
+  //   token0: token0Address,
+  //   token1: token1Address,
+  //   fee: 3000,
+  //   tickLower: minTick,
+  //   tickUpper: maxTick,
+  //   amount0Desired: ethers.BigNumber.from("20000000000000000000"),
+  //   amount1Desired: ethers.BigNumber.from("20000000000000000000"),
+  //   amount0Min: ethers.BigNumber.from("0"),
+  //   amount1Min: ethers.BigNumber.from("0"),
+  //   recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
+  //   deadline: ethers.BigNumber.from("11963744845"),
+  // };
+  // tx = await NonfungiblePositionManagerContract.mint(mintArgs, {
+  //   gasLimit: 3000000,
+  // });
+  // await tx.wait();
+  // receipt = await providers.getTransactionReceipt(tx.hash);
+  // console.log(receipt);
 
   //core position info
   positions = await poolContract.positions(positionKey);
@@ -132,32 +132,32 @@ async function main() {
     deployer.address
   );
   console.log(balance);
-  let tokenId = await NonfungiblePositionManagerContract.tokenOfOwnerByIndex(
-    deployer.address,
-    balance - 1
-  );
-  //let tokenId = 10;
+  // let tokenId = await NonfungiblePositionManagerContract.tokenOfOwnerByIndex(
+  //   deployer.address,
+  //   balance - 1
+  // );
+  let tokenId = 6;
   console.log(tokenId.toString());
   const token = await NonfungiblePositionManagerContract.positions(tokenId);
   console.log(token);
 
   //./////////////////// swap
-  swapArgs = {
-    tokenIn: token0Address,
-    tokenOut: token1Address,
-    fee: 3000,
-    recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
-    deadline: ethers.BigNumber.from("11963744845"),
-    amountIn: ethers.BigNumber.from("500000000000000000"),
-    amountOutMinimum: 0,
-    sqrtPriceLimitX96: 0,
-  };
-  tx = await SwapRouterContract.exactInputSingle(swapArgs, {
-    gasLimit: 3000000,
-  });
-  await tx.wait();
-  receipt = await providers.getTransactionReceipt(tx.hash);
-  console.log(receipt);
+  // swapArgs = {
+  //   tokenIn: token0Address,
+  //   tokenOut: token1Address,
+  //   fee: 3000,
+  //   recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
+  //   deadline: ethers.BigNumber.from("11963744845"),
+  //   amountIn: ethers.BigNumber.from("500000000000000000"),
+  //   amountOutMinimum: 0,
+  //   sqrtPriceLimitX96: 0,
+  // };
+  // tx = await SwapRouterContract.exactInputSingle(swapArgs, {
+  //   gasLimit: 3000000,
+  // });
+  // await tx.wait();
+  // receipt = await providers.getTransactionReceipt(tx.hash);
+  // console.log(receipt);
   //core position info
   //   positions = await poolContract.positions(positionKey);
   //   console.log("core position info", positions);

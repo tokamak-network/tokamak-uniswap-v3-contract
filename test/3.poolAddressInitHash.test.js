@@ -9,6 +9,7 @@ const getTickAtSqrtRatio = sdk.TickMath.getTickAtSqrtRatio;
 const nearestUsableTick = sdk.nearestUsableTick;
 const getAmount0Delta = sdk.SqrtPriceMath.getAmount0Delta;
 const getAmount1Delta = sdk.SqrtPriceMath.getAmount1Delta;
+const mulDivRoundingUp = sdk.FullMath.mulDivRoundingUp;
 const { Pool } = require("@uniswap/v3-sdk");
 const { Percent, BigintIsh } = require("@uniswap/sdk-core");
 const { encodePriceSqrt } = require("../scripts/utils.js");
@@ -214,6 +215,78 @@ describe("check if poolAddress hash is wrong", async function () {
     console.log(encodePriceSqrt(1000000000, 1.71879));
     console.log(encodePriceSqrt(1.71879, 1000000000));
     console.log(encodePriceSqrt(1718.79, 1));
+
+    console.log(
+      getAmount0Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        true
+      ).toString()
+    );
+    console.log(
+      getAmount1Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        false
+      ).toString()
+    );
+    console.log(
+      mulDivRoundingUp(
+        JSBI.BigInt(
+          getAmount1Delta(
+            getSqrtRatioAtTick(0),
+            getSqrtRatioAtTick(60),
+            JSBI.BigInt("1000000"),
+            true
+          ).toString()
+        ),
+        JSBI.BigInt("3000"),
+        JSBI.BigInt("997000")
+      ).toString()
+    );
+
+    console.log(
+      getAmount1Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("-1000000")
+      ).toString()
+    );
+
+    console.log(
+      getAmount0Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        true
+      ).toString()
+    );
+    console.log(
+      getAmount0Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        false
+      ).toString()
+    );
+    console.log(
+      getAmount1Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        true
+      ).toString()
+    );
+    console.log(
+      getAmount1Delta(
+        getSqrtRatioAtTick(0),
+        getSqrtRatioAtTick(60),
+        JSBI.BigInt("1000000"),
+        false
+      ).toString()
+    );
   });
 });
 
