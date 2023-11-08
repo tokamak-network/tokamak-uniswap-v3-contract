@@ -38,7 +38,7 @@ module.exports = {
       },
       // accounts: [`${process.env.PRIVATE_KEY1}`],
       // gas: 1
-      // accounts: [`${process.env.PRIVATE_KEY}`,`${process.env.LOCAL_KEY}`,`${process.env.LOCAL_KEY2}`,`${process.env.LOCAL_KEY3}`,`${process.env.LOCAL_KEY4}`,`${process.env.LOCAL_KEY5}`,`${process.env.LOCAL_KEY6}`,`${process.env.LOCAL_KEY7}`]
+      accounts: [`${process.env.PRIVATE_KEY1}`]
     },
     // polygon: {
     //   chainId: 137,

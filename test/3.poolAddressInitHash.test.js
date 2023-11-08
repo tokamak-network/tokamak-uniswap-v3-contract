@@ -287,6 +287,8 @@ describe("check if poolAddress hash is wrong", async function () {
         false
       ).toString()
     );
+    console.log(ethers.BigNumber.from("2").pow(128).sub(1));
+    console.log(getSqrtRatioAtTick(201207));
   });
 });
 
