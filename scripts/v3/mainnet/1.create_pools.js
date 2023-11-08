@@ -42,6 +42,8 @@ async function main() {
   const USDTContract = await getContract("USDT");
   const USDTAddress = USDTContract.address;
 
+  console.log("deployer.address", deployer.address);
+
   let poolAddressTOSTON = await getPoolContractAddress(
     UniswapV3FactoryContract,
     TONAddress,
@@ -74,22 +76,23 @@ async function main() {
   );
 
   if (poolAddressTOSTON === "0x0000000000000000000000000000000000000000") {
-    //1 WTON = 0.75058 TOS
-    //1 TOS = 1.3323 WTON
+    //1 WTON = 1.7127 TOS
+    //1 TOS = 0.85378 WTON
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (TONAddress < TOSAddress) {
       token0 = TONAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 1.18874;
+      reserve1 = 1.1925;
     } else {
       token0 = TOSAddress;
-      reserve0 = 1.18874;
+      reserve0 = 1.1925;
       token1 = TONAddress;
       reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
-    console.log("======createAndInitialize poolAddressWETHTON=======");
+    console.log("======createAndInitialize poolAddressTOSTON=======");
+    console.log("sqrtPriceX96", sqrtPriceX96.toString());
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -101,22 +104,23 @@ async function main() {
   }
 
   if (poolAddressWETHTOS === "0x0000000000000000000000000000000000000000") {
-    //1 TOS = 0.0011 ETH
-    //1 ETH = 912.128 TOS
+    //1 TOS = 0.0007 ETH
+    //1 ETH = 1422.87 TOS
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < TOSAddress) {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TOSAddress;
-      reserve1 = 1192.55;
+      reserve1 = 1329.67;
     } else {
       token0 = TOSAddress;
-      reserve0 = 1192.55;
+      reserve0 = 1329.67;
       token1 = WETHAddress;
       reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
     console.log("======createAndInitialize poolAddressWETHTOS=======");
+    console.log("sqrtPriceX96", sqrtPriceX96.toString());
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -128,22 +132,23 @@ async function main() {
   }
 
   if (poolAddressWETHTON === "0x0000000000000000000000000000000000000000") {
-    //1 ETH = 1,231.38 WTON TON
-    //1 WTON = 0.00081 ETH
+    //1 ETH = 1214.47 WTON
+    //1 WTON = 0.00082 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < TONAddress) {
       token0 = WETHAddress;
       reserve0 = 1;
       token1 = TONAddress;
-      reserve1 = 1050.68;
+      reserve1 = 1114.94;
     } else {
       token0 = TONAddress;
-      reserve0 = 1050.68;
+      reserve0 = 1114.94;
       token1 = WETHAddress;
       reserve1 = 1;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
     console.log("======createAndInitialize poolAddressWETHTON=======");
+    console.log("sqrtPriceX96", sqrtPriceX96.toString());
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -155,25 +160,26 @@ async function main() {
   }
 
   if (poolAddressWETHUSDC === "0x0000000000000000000000000000000000000000") {
-    //1 ETH = 1,853.50 USDC
+    //1 ETH = 1,799.64 USDC
     //1000000000 000000000 == 1.853500000
-    // 1000000000ETH = 1.9178 USDC
-    // 1 USDC = 0.00054 ETH ETH
-    // 1USDC = 540000000 ETH
+    // 1000000000ETH = 1.79964 USDC
+    // 1 USDC = 0.00056 ETH
+    // 1USDC = 560000000 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < USDCAddress) {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDCAddress;
-      reserve1 = 1.71879;
+      reserve1 = 1.795;
     } else {
       token0 = USDCAddress;
-      reserve0 = 1.71879;
+      reserve0 = 1.795;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
     console.log("======createAndInitialize poolAddressWETHUSDC=======");
+    console.log("sqrtPriceX96", sqrtPriceX96.toString());
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,
@@ -185,7 +191,7 @@ async function main() {
   }
 
   if (poolAddressWETHUSDT === "0x0000000000000000000000000000000000000000") {
-    //1 ETH = 1,853.50 USDC
+    //1 ETH = 1,815.40 USDC
     //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
     // 1 USDC = 0.00054 ETH ETH
@@ -195,15 +201,16 @@ async function main() {
       token0 = WETHAddress;
       reserve0 = 1000000000;
       token1 = USDTAddress;
-      reserve1 = 1.71879;
+      reserve1 = 1.795;
     } else {
       token0 = USDTAddress;
-      reserve0 = 1.71879;
+      reserve0 = 1.795;
       token1 = WETHAddress;
       reserve1 = 1000000000;
     }
     sqrtPriceX96 = encodePriceSqrt(reserve1, reserve0);
     console.log("======createAndInitialize poolAddressWETHUSDT=======");
+    console.log("sqrtPriceX96", sqrtPriceX96.toString());
     totalGasUsed = totalGasUsed.add(
       await createPool(
         token0,

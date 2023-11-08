@@ -73,12 +73,13 @@ async function main() {
   let balanceBeforeTON = await TONContract.balanceOf(deployer.address);
   console.log("balanceBeforeTON", balanceBeforeTON.toString());
 
-  //  // ===============burn liquidity
-  //  positionInfo = await NonfungiblePositionManagerContract.positions(2);
-  // console.log(positionInfo);
-  //   if (positionInfo.liquidity > 0) {
-  //     await exit(NonfungiblePositionManagerContract, positionInfo.liquidity, 9, 0, 0, deployer.address)
-  //   }
+   // ===============burn liquidity
+   positionInfo = await NonfungiblePositionManagerContract.positions(12);
+  console.log(positionInfo);
+  console.log(deployer.address);
+    if (positionInfo.liquidity > 0) {
+      await exit(NonfungiblePositionManagerContract, positionInfo.liquidity, 12, 0, 0, deployer.address)
+    }
 
   // positionInfo = await NonfungiblePositionManagerContract.positions(2);
   // console.log(positionInfo);
@@ -86,32 +87,32 @@ async function main() {
   //   await exitForETH(NonfungiblePositionManagerContract, positionInfo.liquidity, 5, 0, 0, deployer.address, USDTAddress)
   // }
 
-  ///=========== USDTContract
-  let balanceAfterTON = await TONContract.balanceOf(deployer.address);
-  console.log("balanceAfterTON", balanceAfterTON.toString());
-  ///=========== ETHContract
-  let balanceAfterETH = await providers.getBalance(deployer.address);
-  console.log("balanceBeforeETH", balanceAfterETH.toString());
+  // ///=========== USDTContract
+  // let balanceAfterTON = await TONContract.balanceOf(deployer.address);
+  // console.log("balanceAfterTON", balanceAfterTON.toString());
+  // ///=========== ETHContract
+  // let balanceAfterETH = await providers.getBalance(deployer.address);
+  // console.log("balanceBeforeETH", balanceAfterETH.toString());
 
-  let poolAddressWETHTON = await getPoolContractAddress(
-    UniswapV3FactoryContract,
-    TONAddress,
-    WETHAddress,
-    3000
-  );
-  const UniswapV3Pool_ = new ethers.ContractFactory(
-    UniswapV3PoolArtifact.abi,
-    UniswapV3PoolArtifact.bytecode,
-    deployer
-  );
-  UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressWETHTON);
+  // let poolAddressWETHTON = await getPoolContractAddress(
+  //   UniswapV3FactoryContract,
+  //   TONAddress,
+  //   WETHAddress,
+  //   3000
+  // );
+  // const UniswapV3Pool_ = new ethers.ContractFactory(
+  //   UniswapV3PoolArtifact.abi,
+  //   UniswapV3PoolArtifact.bytecode,
+  //   deployer
+  // );
+  // UniswapV3PoolContract = UniswapV3Pool_.attach(poolAddressWETHTON);
 
-  console.log(poolAddressWETHTON);
-  console.log(await UniswapV3PoolContract.slot0());
-  console.log(await UniswapV3PoolContract.token0());
-  console.log(WETHAddress);
-  console.log(await UniswapV3PoolContract.token1());
-  console.log(TONAddress);
+  // console.log(poolAddressWETHTON);
+  // console.log(await UniswapV3PoolContract.slot0());
+  // console.log(await UniswapV3PoolContract.token0());
+  // console.log(WETHAddress);
+  // console.log(await UniswapV3PoolContract.token1());
+  // console.log(TONAddress);
   //1 USDC = 0.00053 ETH ==>
   //1 ETH = 1,890.48 USDC
   //token1 = USDC, token0 = WETH
@@ -231,16 +232,16 @@ async function main() {
   //   }
   // }
 
-  positionInfo = await NonfungiblePositionManagerContract.positions(13);
-  console.log(positionInfo);
-  await exit(
-    NonfungiblePositionManagerContract,
-    positionInfo.liquidity,
-    13,
-    0,
-    0,
-    deployer.address
-  );
+  // positionInfo = await NonfungiblePositionManagerContract.positions(13);
+  // console.log(positionInfo);
+  // await exit(
+  //   NonfungiblePositionManagerContract,
+  //   positionInfo.liquidity,
+  //   13,
+  //   0,
+  //   0,
+  //   deployer.address
+  // );
 
   // positionInfo = await NonfungiblePositionManagerContract.positions(4);
   // await exitForETH(

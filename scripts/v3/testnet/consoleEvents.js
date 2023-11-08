@@ -20,6 +20,24 @@ function consoleEvents(receipt, eventInterface, eventSignature, eventName) {
   console.log();
 }
 
+function getTokenId(receipt, eventInterface, eventSignature, eventName) {
+  let eventIndex = -1;
+  for (let i = 0; i < receipt.logs.length; i++) {
+    if (receipt.logs[i].topics[0] === eventSignature) {
+      eventIndex = i;
+      break;
+    }
+  }
+  if (eventIndex === -1) {
+    console.log("No Events");
+    process.exit();
+  }
+  const data = receipt.logs[eventIndex].data;
+  const topics = receipt.logs[eventIndex].topics;
+  const event = eventInterface.decodeEventLog(eventName, data, topics);
+  return event.tokenId;
+}
+
 module.exports = {
-  consoleEvents,
+  consoleEvents,getTokenId
 };

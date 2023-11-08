@@ -28,6 +28,7 @@ async function main() {
   );
   const NonfungiblePositionManagerAddress =
     NonfungiblePositionManagerContract.address;
+  console.log("deployer.address", deployer.address);
   ///=============== TONContract
   const TONContract = (await getContract("TON")).connect(deployer);
   ///=============== TOSContract

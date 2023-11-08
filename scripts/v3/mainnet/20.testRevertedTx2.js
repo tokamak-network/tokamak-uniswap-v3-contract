@@ -11,7 +11,7 @@ const UniswapV3PoolArtifact = require("../abis/UniswapV3Pool.sol/UniswapV3Pool.j
 const { encodePriceSqrt } = require("../../utils.js");
 const sdk = require("@uniswap/v3-sdk");
 const getTickAtSqrtRatio = sdk.TickMath.getTickAtSqrtRatio;
-const { consoleEvents, getTokenId } = require("./../testnet/consoleEvents.js");
+const { consoleEvents, getTokenId } = require("../testnet/consoleEvents.js");
 const nearestUsableTick = sdk.nearestUsableTick;
 const { expect } = require("chai");
 const getSqrtRatioAtTick = sdk.TickMath.getSqrtRatioAtTick;
@@ -28,9 +28,9 @@ const eventSignature = ethers.utils.id(
   "IncreaseLiquidity(uint256,uint128,uint256,uint256)"
 );
 const eventName = "IncreaseLiquidity";
-let totalGasUsed = ethers.BigNumber.from("0");
 let allowanceAmount = ethers.constants.MaxUint256;
 let minimumallowanceAmount = ethers.constants.MaxUint256;
+
 async function main() {
   let totalGasUsed = ethers.BigNumber.from("0");
   const chainName = hre.network.name;
@@ -106,64 +106,65 @@ async function main() {
   let token0Address = TOSAddress < TONAddress ? TOSAddress : TONAddress;
   let token1Address = TOSAddress < TONAddress ? TONAddress : TOSAddress;
   ///////////////////// mint liquidity
-  mintArgs = {
-    token0: token0Address,
-    token1: token1Address,
-    fee: 3000,
-    tickLower: minTick,
-    tickUpper: maxTick,
-    amount0Desired: ethers.BigNumber.from("20000000000000000"),
-    amount1Desired: ethers.BigNumber.from("20000000000000000"),
-    amount0Min: ethers.BigNumber.from("0"),
-    amount1Min: ethers.BigNumber.from("0"),
-    recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
-    deadline: ethers.BigNumber.from("119637448450"),
-  };
-  tx = await NonfungiblePositionManagerContract.mint(mintArgs, {
-    gasLimit: 3000000,
-  });
-  await tx.wait();
-  receipt = await providers.getTransactionReceipt(tx.hash);
-  console.log(receipt);
+  // mintArgs = {
+  //   token0: token0Address,
+  //   token1: token1Address,
+  //   fee: 3000,
+  //   tickLower: minTick,
+  //   tickUpper: maxTick,
+  //   amount0Desired: ethers.BigNumber.from("20000000000000000"),
+  //   amount1Desired: ethers.BigNumber.from("20000000000000000"),
+  //   amount0Min: ethers.BigNumber.from("0"),
+  //   amount1Min: ethers.BigNumber.from("0"),
+  //   recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
+  //   deadline: ethers.BigNumber.from("119637448450"),
+  // };
+  // tx = await NonfungiblePositionManagerContract.mint(mintArgs, {
+  //   gasLimit: 3000000,
+  // });
+  // await tx.wait();
+  // receipt = await providers.getTransactionReceipt(tx.hash);
+  // console.log(receipt);
 
   //core position info
-  positions = await poolContract.positions(positionKey);
-  console.log("core position info", positions);
+  // positions = await poolContract.positions(positionKey);
+  // console.log("core position info", positions);
 
   //get Position Info
-  const balance = await NonfungiblePositionManagerContract.balanceOf(
-    deployer.address
-  );
-  console.log(balance);
+  // const balance = await NonfungiblePositionManagerContract.balanceOf(
+  //   deployer.address
+  // );
+  // console.log(balance);
   // let tokenId = await NonfungiblePositionManagerContract.tokenOfOwnerByIndex(
   //   deployer.address,
   //   balance - 1
   // );
-  let tokenId = getTokenId(receipt, eventInterface, eventSignature, eventName);
-  console.log(tokenId.toString());
-  const token = await NonfungiblePositionManagerContract.positions(tokenId);
-  console.log(token);
+  //let tokenId = getTokenId(receipt, eventInterface, eventSignature, eventName);
+  // console.log(tokenId.toString());
+  // const token = await NonfungiblePositionManagerContract.positions(tokenId);
+  // console.log(token);
+  let tokenId = 6;
 
   /////////////////// swap
-  swapArgs = {
-    tokenIn: token0Address,
-    tokenOut: token1Address,
-    fee: 3000,
-    recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
-    deadline: ethers.BigNumber.from("119637448450"),
-    amountIn: ethers.BigNumber.from("5000000000000000"),
-    amountOutMinimum: 0,
-    sqrtPriceLimitX96: 0,
-  };
-  tx = await SwapRouterContract.exactInputSingle(swapArgs, {
-    gasLimit: 3000000,
-  });
-  await tx.wait();
-  receipt = await providers.getTransactionReceipt(tx.hash);
-  console.log(receipt);
+  // swapArgs = {
+  //   tokenIn: token0Address,
+  //   tokenOut: token1Address,
+  //   fee: 3000,
+  //   recipient: "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
+  //   deadline: ethers.BigNumber.from("119637448450"),
+  //   amountIn: ethers.BigNumber.from("5000000000000000"),
+  //   amountOutMinimum: 0,
+  //   sqrtPriceLimitX96: 0,
+  // };
+  // tx = await SwapRouterContract.exactInputSingle(swapArgs, {
+  //   gasLimit: 3000000,
+  // });
+  // await tx.wait();
+  // receipt = await providers.getTransactionReceipt(tx.hash);
+  // console.log(receipt);
   //core position info
-  positions = await poolContract.positions(positionKey);
-  console.log("core position info", positions);
+  // positions = await poolContract.positions(positionKey);
+  // console.log("core position info", positions);
 
   ////////////////////////decrease liquidity
   let liquidity = (await NonfungiblePositionManagerContract.positions(tokenId))
@@ -191,21 +192,13 @@ async function main() {
     NonfungiblePositionManagerContract.interface.encodeFunctionData("collect", [
       collectArgs,
     ]);
-  tx = await NonfungiblePositionManagerContract.multicall([
-    decreaseEncoded,
-    collectEncoded,
-  ]);
-  await tx.wait();
-
-  //core position info
-  //   positions = await poolContract.positions(positionKey);
-  //   console.log("core position info", positions);
-  //   liquidity = (await NonfungiblePositionManagerContract.positions(tokenId)).liquidity;
-  //   console.log(liquidity);
-  //   const token1 = await NonfungiblePositionManagerContract.positions(1);
-  //   console.log(token1);
-
-  //   console.log("here???");
+    console.log("1");
+  // tx = await NonfungiblePositionManagerContract.multicall([
+  //   decreaseEncoded,
+  //   collectEncoded,
+  // ],{gasLimit: 3000000});
+  //await tx.wait();
+  console.log("2");
   //////////////////////////////////increase liquidity
   let increaseArgs = {
     tokenId: tokenId,
@@ -215,13 +208,11 @@ async function main() {
     amount1Min: ethers.BigNumber.from("0"),
     deadline: ethers.BigNumber.from("119637448450"),
   };
-  console.log("1");
   tx = await NonfungiblePositionManagerContract.increaseLiquidity(
     increaseArgs,
     { gasLimit: 3000000 }
   );
   await tx.wait();
-  console.log("2");
   //core position info
   positions = await poolContract.positions(positionKey);
   console.log("core position info", positions);
