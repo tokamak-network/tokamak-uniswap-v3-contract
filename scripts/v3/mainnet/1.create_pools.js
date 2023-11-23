@@ -195,6 +195,7 @@ async function main() {
     //1000000000 000000000 == 1.853500000
     // 1000000000ETH = 1.9178 USDC
     // 1 USDC = 0.00054 ETH ETH
+    // 540000000 ETH = 1 USDC
     // 1USDC = 540000000 ETH
     let token0, token1, sqrtPriceX96, reserve0, reserve1;
     if (WETHAddress < USDTAddress) {

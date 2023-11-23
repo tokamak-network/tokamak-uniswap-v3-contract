@@ -11,34 +11,34 @@ module.exports = {
   networks: {
     hardhat: {
       chainId: 31337,
-      forking: {
+      //forking: {
         //url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
         //blockNumber: 21186,
         //url:`https://goerli.optimism.tokamak.network`
-        url: "https://rpc.titan-goerli.tokamak.network",
-        blockNumber: 1296,
+        //url: "https://rpc.titan-goerli.tokamak.network",
+        //blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
         //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      },
+      //},
     },
     localhost: {
       chainId: 31337,
-      forking: {
+      //forking: {
         //url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
         //blockNumber: 21186,
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        url: "https://rpc.titan-goerli.tokamak.network",
-        blockNumber: 1296,
+        //url: "https://rpc.titan-goerli.tokamak.network",
+        //blockNumber: 1296,
         //url: 'https://rpc.titan-goerli.tokamak.network',
         //url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`
         //url:`https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY2}`,
         //url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      },
+      //},
       // accounts: [`${process.env.PRIVATE_KEY1}`],
       // gas: 1
-      accounts: [`${process.env.PRIVATE_KEY1}`]
+      //accounts: [`${process.env.PRIVATE_KEY1}`]
     },
     // polygon: {
     //   chainId: 137,
