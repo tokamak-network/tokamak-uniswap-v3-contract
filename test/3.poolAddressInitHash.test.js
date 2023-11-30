@@ -287,11 +287,15 @@ describe("check if poolAddress hash is wrong", async function () {
         false
       ).toString()
     );
-    console.log(ethers.BigNumber.from("2").pow(128).sub(1));
-    console.log(getSqrtRatioAtTick(201207));
-    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1000000000, 1.795))))
-    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(540000000, 1))))
-    
+    console.log("---");
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1000000000, 1.05454))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1.05454, 1000000000))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1, 952.383))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(952.383, 1))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1, 905.282))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(905.282, 1))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1000000000000, 1.1))))
+    console.log(getTickAtSqrtRatio(JSBI.BigInt(encodePriceSqrt(1.1, 1000000000000))))
   });
 });
 
