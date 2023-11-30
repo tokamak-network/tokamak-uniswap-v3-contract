@@ -71,6 +71,13 @@ module.exports = {
       gasPrice: 1000000000,
       deploy: ["deploy_titan"],
     },
+    holesky: {
+      url: `https://ethereum-holesky.publicnode.com`,
+      accounts: [`${process.env.PRIVATE_KEY1}`],
+      chainId: 17000,
+      // gasMultiplier: 1.25,
+      // gasPrice: 10000000000,
+    },
   },
   etherscan: {
     // Your API key for Etherscan
@@ -91,6 +98,14 @@ module.exports = {
         urls: {
           apiURL: "https://explorer.titan.tokamak.network/api",
           browserURL: "https://explorer.titan.tokamak.network",
+        },
+      },
+      {
+        network: 'holesky',
+        chainId: 17000,
+        urls: {
+          apiURL: 'https://api-holesky.etherscan.io/api',
+          browserURL: 'https://holesky.etherscan.io/',
         },
       },
     ],
